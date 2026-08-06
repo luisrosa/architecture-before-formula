@@ -1,0 +1,101 @@
+\section{Stochastic variable-successor realizations}\label{supp:stochastic-successor}
+
+The main article introduces deterministic updates into a tagged union $Y^{\sqcup}=\bigsqcup_{c\in\mathfrak C}Y_c$. This section records a stochastic realization. The stochastic structure is an extension of the architectural target, not a prerequisite for the deterministic Transformer reconstruction.
+
+\subsection{Configuration and within-sector content}
+
+Equip each $Y_c$ and the disjoint union $Y^{\sqcup}$ with measurable structures. A stochastic successor update is a Markov kernel
+\[
+K_\theta:X\rightsquigarrow Y^{\sqcup}.
+\]
+Let $\Pi_\theta(\cdot\mid H)$ be a probability law on $\mathfrak C$, and for each $c$ let $Q_{\theta,c}(\cdot\mid H)$ be a probability kernel supported on $Y_c$. For measurable $A\subseteq Y^{\sqcup}$, define
+\begin{equation}\label{eq:supp-sector-content-factorization}
+K_\theta(A\mid H)
+=
+\sum_{c\in\mathfrak C}
+\Pi_\theta(c\mid H)
+Q_{\theta,c}(A\cap Y_c\mid H).
+\end{equation}
+The sector law selects the successor receiver presentation; the within-sector kernel selects content inside it. A deterministic update is the degenerate case in which both kernels are point masses.
+
+\subsection{Positive joint successor law}
+
+Let $\rho$ be a probability reference measure on $Y^{\sqcup}$, let $\mathcal U_\theta(x^+;H)$ be a measurable contextual successor potential, and let $C(x^+)$ be a measurable successor penalty. Assume
+\[
+0<\Xi_\theta(H)
+:=
+\int_{Y^{\sqcup}}
+\exp[-(\mathcal U_\theta(x;H)+C(x))/\tau] \,\rho(dx)
+<\infty.
+\]
+Define
+\begin{equation}\label{eq:supp-joint-successor-law}
+\mathbb P_\theta(dx^+\mid H)
+=
+\frac{
+\exp[-(\mathcal U_\theta(x^+;H)+C(x^+))/\tau]\rho(dx^+)
+}{
+\Xi_\theta(H)
+}.
+\end{equation}
+The term $C$ is a declared penalty, not automatically a physical or computational cost. When it factors through $\operatorname{sect}$, it is a configuration penalty. Carrier count alone need not equal FLOPs, latency, storage, energy, or description length.
+
+\begin{proposition}[Effective sector potential]\label{prop:supp-effective-sector-potential}
+Let $\rho_c$ be the restriction of $\rho$ to $Y_c$ and define
+\[
+Z_c(H)
+:=
+\int_{Y_c}
+\exp[-(\mathcal U_\theta(x;H)+C(x))/\tau] \,\rho_c(dx).
+\]
+Set $\mathcal U_\theta^{\mathrm{eff}}(c;H):=-\tau\log Z_c(H)$ when $Z_c(H)>0$, and $+\infty$ otherwise. The sector marginal of \eqref{eq:supp-joint-successor-law} is
+\[
+\Pi_\theta^{\mathrm{Gibbs}}(c\mid H)
+=
+\frac{e^{-\mathcal U_\theta^{\mathrm{eff}}(c;H)/\tau}}
+{\sum_{c'}e^{-\mathcal U_\theta^{\mathrm{eff}}(c';H)/\tau}}.
+\]
+\end{proposition}
+
+\begin{proof}
+Integrate the joint numerator over each disjoint sector. The sector integrals partition the global normalizer.
+\end{proof}
+
+Integrating out within-sector content therefore gives a log-integral-exp potential over configurations. This is a stochastic quotient identity, not evidence that the architecture is physically equilibrated.
+
+\subsection{Joint successor free energy}
+
+Let $\mathcal E(\cdot;H)=\mathcal U_\theta(\cdot;H)+C(\cdot)$. For every probability law $p\ll\rho$ for which $\E_p[|\mathcal E(X;H)|]$ and $D_{\mathrm{KL}}(p\Vert\rho)$ are finite, define
+\[
+\mathcal G[p;H]
+:=\E_p[\mathcal E(X;H)]+\tau D_{\mathrm{KL}}(p\Vert\rho).
+\]
+
+\begin{theorem}[Joint successor free-energy characterization]\label{thm:supp-joint-successor-free-energy}
+For the law in \eqref{eq:supp-joint-successor-law},
+\[
+\mathcal G[p;H]
+=-\tau\log\Xi_\theta(H)
++\tau D_{\mathrm{KL}}(p\Vert\mathbb P_\theta(\cdot\mid H)).
+\]
+Consequently, $\mathbb P_\theta(\cdot\mid H)$ is the unique minimizer among the admissible laws whenever its free energy is finite.
+\end{theorem}
+
+\begin{proof}
+Use
+\[
+\log\frac{d\mathbb P_\theta}{d\rho}(x)
+=-\frac{\mathcal E(x;H)}{\tau}-\log\Xi_\theta(H)
+\]
+inside $D_{\mathrm{KL}}(p\Vert\mathbb P_\theta)$ and rearrange. Nonnegativity of KL divergence gives minimality, with equality only when $p=\mathbb P_\theta(\cdot\mid H)$ almost everywhere.
+\end{proof}
+
+\subsection{Multi-token specialization and nonclaims}
+
+For language generation, take
+\[
+Y_N=\Sigma^N,
+\qquad
+Y^{\sqcup}=\bigsqcup_{N=0}^{K}\Sigma^N.
+\]
+The sector variable is the proposed count $N$, while the within-sector law describes a jointly structured token block. Existing multi-token prediction and speculative-decoding methods are nearby realization strategies, but the construction above does not assert equality with them. It supplies no tractable partition function, efficient sampler, acceptance rule, equality with the original autoregressive law, or guaranteed compute reduction.

@@ -1,0 +1,292 @@
+\section{Variants, edge cases, and qualification ledger}\label{supp:variants}
+
+This section records boundary conditions that prevent the main results from being read more broadly than proved.
+
+\subsection{Masks and empty support}
+
+Receiver-row anchoring requires at least one admissible source. If a row has empty support, the architecture must declare a separate fallback, such as:
+\begin{itemize}
+\item identity continuation with zero routed increment;
+\item a fixed null source;
+\item a learned default carrier;
+\item an instance-supplied fallback state;
+\item an explicit error or halting state.
+\end{itemize}
+Softmax does not define the empty-row case by itself.
+
+A mask can have different provenance:
+\begin{itemize}
+\item schema-fixed, as in a causal order;
+\item instance-supplied, as in padding or a graph;
+\item parameter-dependent but state-independent;
+\item state-generated, as in hard dynamic routing.
+\end{itemize}
+The attention normal form permits any declared mask with nonempty rows. The provenance profile distinguishes the corresponding schemas even when two masks agree on a selected state window.
+
+\subsection{Temperature and hard routing}
+
+The attention normal form assumes a finite positive inverse-temperature scale $\beta$. As $\beta\to\infty$, the row distribution concentrates on score maximizers, but a tied maximum does not determine a unique hard route without an additional tie-breaking or set-valued rule. Hard top-$k$ routing is therefore either:
+\begin{enumerate}[label=(\roman*)]
+\item a different receiver anchor;
+\item a separately declared discontinuous limit with a tie convention;
+\item a stochastic choice rule on the maximizing set.
+\end{enumerate}
+It should not be treated as literally the same map as finite-temperature softmax.
+
+\subsection{Signed, vector, and operator-valued routing}
+
+The positive scalar evidence regime excludes cancellation at the routing-coefficient level. Signed scalar routing may sometimes be represented by expanding the carrier and moving sign into payload directions, as in the FFN signed-carrier construction. That expansion changes the marked presentation and does not establish identity between every signed operator and a positive simplex allocation.
+
+Vector- or operator-valued routing has the form
+\[
+z_r(H)
+=
+\sum_i T_{ri}(H)u_i(H),
+\]
+with $T_{ri}(H)$ itself carrying channel- or coordinate-dependent action. Such transport cannot in general be reduced to one scalar coefficient per pair without expanding the carrier, increasing payload type, or losing information. Scalar attention is therefore one codomain choice for routed organization, not the universal routed form.
+
+\subsection{Finite rank and shared separability}
+
+Every realized finite score matrix has finite matrix rank. This pointwise fact does not supply shared query and key maps across a state domain. The relevant main-text assumption is family-level separability:
+\[
+s_{ri}(H)=\ip{q(x_r(H))}{k(y_i(H))}
+\]
+with shared receiver and source feature maps $x_r,y_i$ and shared functions $q,k$. Any fixed positive pair bias is represented once through the baseline factor $\kappa_{ri}$ rather than duplicated inside the contextual score. Independent factorizations chosen separately for each realized $H$ may:
+\begin{itemize}
+\item vary discontinuously with $H$;
+\item depend jointly on the entire state rather than on receiver and source states separately;
+\item require incompatible coordinate gauges across states;
+\item fail to define one shared parameterized query--key architecture.
+\end{itemize}
+The rank-truncation bound in \Cref{prop:supp-rank-error} applies after one common bilinear score operator has been declared.
+
+\subsection{Source-local payloads}
+
+Standard attention uses a payload $v_i(y_i(H))$ that factors through the marked source feature and is independent of the receiver. A general source-resolved message may instead have
+\[
+m_{ri}(H)=M(x_r(H),y_i(H),e_{ri},H),
+\]
+with receiver-, relation-, or global-state-conditioned content. Such a message remains a valid receiver presentation but lies outside the source-local-payload assumption of the attention normal form. This distinction is independent of whether routing coefficients are normalized.
+
+\subsection{Aggregation dimension and target sufficiency}
+
+The aggregate-fiber obstruction applies to the actual receiver exposure, whatever its dimension. Increasing width can refine exposure but does not guarantee injectivity on the relevant state domain. Conversely, a low-dimensional exposure may be sufficient for a low-dimensional target.
+
+Two questions should be separated:
+\begin{enumerate}[label=(\roman*)]
+\item \textbf{architecture-relative}: which distinctions does the receiver interface retain?;
+\item \textbf{target-relative}: which of those distinctions are needed for the selected continuation or scientific query?
+\end{enumerate}
+A representation may be sufficient for one target and structurally destructive for another.
+
+\subsection{Stochastic stages}
+
+The main article uses deterministic maps. A stochastic stage can be treated in at least two ways.
+
+\paragraph{Explicit randomness.}
+Enlarge the predecessor state by a random seed $\omega$ and analyze a deterministic map
+\[
+F:X\times\Omega_{\mathrm{rand}}\to Y.
+\]
+Fiber claims then hold pointwise or almost surely on the enlarged state.
+
+\paragraph{Markov-kernel presentation.}
+Represent the stage by a kernel
+\[
+K(x,\cdot)\in\mathcal P(Y).
+\]
+Exact descent requires equality of conditional output laws on source-representation fibers. Receiver-interface factorization must then be formulated in a category of kernels or probability measures.
+
+Training-time dropout is excluded from the canonical deterministic block theorem for this reason. Its inference-time deterministic scaling is a different stage.
+
+\subsection{Carrier changes and cross-attention}
+
+When source and receiver carriers differ, additive routing remains typed:
+\[
+A_H:
+\bigoplus_{i\in S}U_i
+\to
+\bigoplus_{r\in R}W_r.
+\]
+Cross-attention is therefore covered by distinct source and receiver carriers. Pooling, patch merging, carrier creation, deletion, or splitting additionally require an explicit successor carrier presentation. Identity residual continuation is unavailable when predecessor and successor local state types do not match, unless an embedding or typed transport is declared.
+
+A carrier-changing map may be:
+\begin{itemize}
+\item injective expansion;
+\item invertible typed recoding;
+\item quotient or pooling;
+\item many-to-many transport through a new carrier;
+\item state-conditioned carrier generation.
+\end{itemize}
+Noninvertible carrier changes create new interface fibers and therefore additional information barriers.
+
+\subsection{Parallel, sequential, and recurrent schedules}
+
+A parallel block
+\[
+H^+=H+A(H)+L(H)
+\]
+is not the same marked schedule as the sequential block
+\[
+H^{(1)}=H+A(H),
+\qquad
+H^+=H^{(1)}+L(H^{(1)}).
+\]
+The sequential local branch is evaluated on a different represented state. Even if both expressions have the same first-order expansion under a small step size, they define different exact stage factorizations and different intermediate interfaces.
+
+Recurrent or equilibrium blocks introduce additional objects:
+\begin{itemize}
+\item a recurrent state or iterate carrier;
+\item a stopping or convergence condition;
+\item a fixed-point selection rule when solutions are nonunique;
+\item a schedule for exposing intermediate iterates.
+\end{itemize}
+These are architectural commitments rather than numerical details.
+
+\subsection{Residual continuation is not unconditional invertibility}
+
+An identity residual path marks predecessor state as one summand of the successor expression. The total map
+\[
+z\mapsto z+f(z)
+\]
+can nevertheless be noninjective. \Cref{lem:supp-residual-injective} gives one sufficient small-Lipschitz condition for injectivity. Absent such a condition, the correct claim is:
+\begin{quote}
+The architecture contains an identity continuation path in its marked factorization.
+\end{quote}
+It is stronger, and generally false without hypotheses, to claim that the complete residual update preserves every predecessor distinction.
+
+\subsection{Architecture comparison}
+
+The main article proves explicit typed realization witnesses, such as the schema-fixed additive routed realization of finite convolution. It does not define a universal specialization preorder over arbitrary schemas. Such a preorder would require alignment maps between carrier and stage types, composition rules for fixing and endogenizing slots, treatment of schedule changes, and a declaration of which marks are constitutive for the comparison. The local re-presentation convention handles only bijective recodings of one receiver interface. The paper therefore uses explicit realization witnesses and coordinate profiles rather than asserting one total ordering of architectures.
+
+\subsection{Routing and stronger mediation claims}
+
+A routing coefficient belongs to the operative allocation rule. It is not automatically an intervention-relative edge. Distinct allocations over identical payloads can yield the same receiver aggregate, and aggregation or later continuation can cancel source variation. Establishing a stronger mediation claim requires independently declared admissible contrasts, controls, and receiver outcomes. No such relation follows from the attention formula alone.
+
+\subsection{Distinct architectural work performed by the attention commitments}\label{supp:commitment-witnesses}
+
+The normal-form assumptions select different coordinates of the attention realization. The following witnesses remove one commitment while retaining a typed receiver factorization.
+
+\paragraph{Nonmultiplicative positive link.}
+Let $\psi(s)=\log(1+e^s)$ and set
+\[
+\alpha_{ri}
+=
+\frac{M_{ri}\kappa_{ri}\psi(s_{ri})}
+{\sum_{j\in S_r}\kappa_{rj}\psi(s_{rj})}.
+\]
+The row remains positive, source-local, and additive, but $\psi(a+b)\neq\psi(a)\psi(b)$ in general. The exponential evidence law therefore does not follow.
+
+\paragraph{Signed or operator-valued pair contributions.}
+Let $C_{ri}(H)\in\mathcal L(U_i,W_r)$ and define
+\[
+z_r(H)=\sum_i C_{ri}(H)u_i(H).
+\]
+This satisfies the additive routed realization of the main article without a factorization into positive scalar mass and source-local payload. A probability row, scalar potential, and KL free-energy characterization are therefore unavailable without further marks.
+
+\paragraph{Globally coupled allocation.}
+Let $w_{ri}>0$ and choose $\alpha$ by minimizing a transport objective subject to both row sums and column capacities. Ratios within one row then depend on constraints involving other receivers. Independent receiver-row anchoring and rowwise softmax no longer follow, even though the allocation remains positive and normalized.
+
+\paragraph{Pair-conditioned payloads.}
+Let
+\[
+z_r(H)=\sum_i\alpha_{ri}(H)v(x_r(H),y_i(H)).
+\]
+The coefficients may still be standard softmax coefficients, but the transported value no longer factors through the source feature alone. The standard source-only value map is therefore an additional architectural commitment.
+
+\paragraph{Nonadditive aggregation.}
+Let a receiver state evolve as
+\[
+h_{r,0}=0,
+\qquad
+h_{r,t+1}=\Phi(h_{r,t},c_{r,i_t}),
+\qquad
+z_r=h_{r,|S_r|},
+\]
+for a declared source order and nonlinear update $\Phi$. Source-resolved contributions remain available, but one weighted-sum exposure does not describe what survives.
+
+\paragraph{A nonseparable score family.}
+On $[0,1]^2$, the family
+\[
+s(x,y)=e^{xy}
+\]
+has no exact finite separation-rank representation on the full continuous domain. Indeed, for any distinct $x_1,\ldots,x_n$, the functions $y\mapsto e^{x_my}$ are linearly independent: differentiating a putative relation at $y=0$ through order $n-1$ gives a Vandermonde system. Hence the score family spans no finite-dimensional function space in either argument. Positive row anchoring still gives a normalized kernel, but no exact shared finite-dimensional query--key chart follows.
+
+\paragraph{State-generated support.}
+Let
+\[
+M_{ri}(H)=\mathbf 1\{g(x_r(H),y_i(H))\ge0\}.
+\]
+The allocation may remain positive, source-local, and additive on its realized support, but admissibility is now constructed from current state rather than supplied as a fixed hard sector. The resulting architecture has a different provenance coordinate even when a realized row numerically matches a fixed mask.
+
+These examples do not claim that the listed assumptions are logically necessary for every use of the word ``attention.'' They show that each assumption performs distinct architectural work in the stated normal form.
+
+\subsection{Proof dependency audit}
+
+The main logical dependencies are:
+\[
+\begin{array}{c}
+\text{represented update + marked receiver presentation}\\
+\downarrow\\
+\text{receiver branches}\\
+\downarrow\\
+\text{receiver-wise architectural factorization }B_j=G_jQ_j\\
+\downarrow\\
+\begin{array}{ccc}
+\text{fiber barriers}
+&\qquad&
+\text{branch quotient and interface refinement}
+\end{array}\\
+\downarrow\\
+Q_j\cong\langle L_j,\Agg_jP_j\rangle\\
+\downarrow\\
+\begin{array}{ccc}
+\text{aggregation limits}
+&\qquad&
+\text{additive routed operator family}
+\end{array}\\
+\begin{array}{ccc}
+&\swarrow\qquad\searrow&\\[-1mm]
+\text{attention restrictions on }P_j
+&&
+\text{marked refinement of }G_j\\
+\downarrow&&\downarrow\\[-1mm]
+\text{attention + positive-scalar potential}
+&&
+\text{FFN hidden continuation}\\
+&\searrow\qquad\swarrow&\\[-1mm]
+\multicolumn{3}{c}{\text{coarse block factorization, then fine two-sublayer presentation}}
+\end{array}
+\end{array}
+\]
+The aggregate-fiber theorem branches directly from the source-resolved refinement and constrains every later local continuation. Provenance typing and essential dependence constrain interpretation across the diagram. Stochastic successor laws and other extensions in this supplement are not prerequisites for any arrow above.
+
+\subsection{Claim-status ledger}
+
+\begin{longtable}{@{}p{0.42\textwidth}p{0.17\textwidth}p{0.34\textwidth}@{}}
+\caption{Conditional results and explicitly rejected overclaims.}\label{tab:supp-claim-status}\\
+\toprule
+Claim & Status & Support \\
+\midrule
+\endfirsthead
+\toprule
+Claim & Status & Support \\
+\midrule
+\endhead
+Representation fibers impose exact barriers & proved & fiber factorization criterion \\
+Carrier indexing alone imposes locality & rejected & full-access collapse \\
+Locality survives arbitrary global coordinate mixing & rejected & conjugacy counterexample \\
+A proposed receiver interface is sufficient & iff theorem & fiber factorization criterion \\
+Every re-presentation preserves receiver locality & rejected without matching interface fibers & conjugacy counterexample and re-presentation proposition \\
+State-indexed additive routing defines an operator family & proved & additive routed realization \\
+State conditioning uniquely implies attention & rejected & attention commitment ledger \\
+Declared scalar positive commitments imply softmax attention & proved & attention normal-form theorem \\
+Pairwise compute equals retained exposure & rejected & aggregate-fiber obstruction \\
+A later local map can recover erased distinctions & rejected & deterministic lower bound \\
+Plain and gated FFNs admit hidden-direction routing & proved & exact column decompositions \\
+A canonical PreNorm block factors through an attention-constructed interface and structured local continuation & proved & coarse whole-block theorem \\
+The coarse or fine decomposition uniquely identifies mechanisms & rejected & factorization and gauge underdetermination \\
+Attention weights are direct causal edges & rejected & routing/mediation distinction \\
+Transformers are assumption-free or inevitable & rejected & remaining-commitment audit \\
+\bottomrule
+\end{longtable}

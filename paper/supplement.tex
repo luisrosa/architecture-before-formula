@@ -1,0 +1,33 @@
+\input{preamble}
+\usepackage{xr-hyper}
+\externaldocument{main}
+\hypersetup{
+  pdftitle={Architecture Before the Formula: Technical Supplement v1.0},
+  pdfsubject={Auxiliary proofs, commitment witnesses, variants, and stochastic successor extensions},
+  pdfkeywords={receiver factorization, attention, aggregation, FFN, approximation, variable successor populations}
+}
+
+\title{\textbf{Architecture Before the Formula}\\
+\large Technical Supplement: Proofs, Variants, and Stochastic Extensions}
+\author{Luis F. Rosario Freytes\\University of Michigan, Ann Arbor}
+\date{Working preprint v1.0 --- August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This supplement collects quantitative bounds, edge cases, and extensions outside the main dependency spine of the v1.0 article. It includes entropy-regularized anchoring, softmax stability and score-rank approximation, structural approximation ledgers, finite-support interpolation, explicit witnesses separating the attention commitments, information accounting under aggregation, signed and normalized FFN presentations, typed local approximation, residual error propagation, and stochastic variable-successor realizations with conditional Gibbs and KL identities. None of these extensions changes the main article's architectural primitive or the dependency path to the Transformer normal form.
+\end{abstract}
+
+\paragraph{Relation to the main article.}
+The main article contains the definitions and proofs required for receiver-factored architecture, interface barriers, attention, local continuation, and the canonical block. This supplement assumes that notation and compiles after the main article so cross-document references can be resolved.
+
+\input{supplement/01_additional_proofs}
+\input{supplement/02_variants}
+\input{supplement/03_moved_results}
+\input{supplement/04_stochastic_successor}
+
+\bibliographystyle{plainnat}
+\bibliography{references,references_additions}
+
+\end{document}

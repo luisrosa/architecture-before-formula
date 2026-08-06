@@ -1,0 +1,59 @@
+# v1.0 validation record
+
+**Artifact:** *Architecture Before the Formula: Receiver-Wise Factorization and the Reconstruction of Transformer Blocks*  
+**Version:** 1.0  
+**Export validation date:** 2026-08-06
+
+## Status
+
+This repository snapshot was constructed from the previously validated receiver-factorization manuscript, promoted to v1.0, flattened into a version-local source tree, and rebuilt from clean source. No mathematical theorem, definition, proof, assumption, citation, or substantive argument was changed during the export. The only manuscript edits were release labels, bibliography paths, and one duplicated PDF keyword.
+
+The exact GitHub commit SHA and workflow-run identifiers will be recorded after this snapshot is initialized in the new private repository and passes its first Actions run.
+
+## Local export evidence
+
+| Item | Value |
+|---|---|
+| Main article | 30 pages; SHA-256 `8d9d8bc623f71e2f5b05b1c0fbe7605104f6d7beb4e84ee7a7dea254304f1805` |
+| Technical supplement | 14 pages; SHA-256 `e9b028b458984cec21ae6cca7454086dc7b0bb460e67972d74f78bb030028d2b` |
+| TeX environment | pdfTeX 1.40.26; latexmk 4.86 |
+| Source layout | current source contained entirely in `paper/` |
+| Bibliography | local `paper/references.bib` and `paper/references_additions.bib` |
+| Font embedding | all fonts embedded in both PDFs |
+| Rasterization | all 30 main pages and 14 supplement pages rendered successfully |
+| Source identity | 17 section and bibliography files are byte-identical to the validated pre-release source; only version metadata and bibliography paths changed in the entry-point files |
+
+The clean source ZIP hash is recorded alongside the release artifacts rather than inside the archive, avoiding a self-referential package.
+
+## Formal invariants
+
+1. The receiver-factored architectural presentation remains the central typed object.
+2. Every load-bearing result is proved in the main article or public supplement.
+3. Bijective interface recoding is handled locally without importing a global mechanism-equivalence theory.
+4. `P_j`, `Agg_j P_j`, `Q_j`, and `G_j` remain distinct.
+5. Operator-valued pair contributions precede scalar relevance and transport.
+6. Attention remains a conditional normal form, with a typed neighboring witness for each commitment.
+7. Effective-potential language remains downstream of positive scalar routing.
+8. The actual FFN activation vector remains the hidden carrier.
+9. The deterministic variable-successor architecture remains in the main article; stochastic realizations remain in the supplement.
+10. Routing weights alone do not establish intervention-relative mediation.
+
+## Repository checks completed
+
+- no duplicate labels;
+- no missing internal references;
+- no missing bibliography keys;
+- no unresolved citations or `natbib` warnings;
+- no multiply defined labels or overfull boxes;
+- correct semantic statement types under shared numbering;
+- no stale pre-release paths or labels;
+- no development-only cross-paper dependency in the public snapshot;
+- no generated LaTeX products in `paper/`;
+- stable compiled PDFs linked directly from the root README;
+- deterministic clean-source packaging;
+- source-package extraction and independent rebuild;
+- PDF structure, metadata, text extraction, embedded fonts, and every-page rendering.
+
+## Continuous validation
+
+`.github/workflows/validate-paper.yml` validates the exact repository tree on every pull request and push to `main`. After initialization, the final release audit should add the exact merged commit SHA, workflow run, artifact digest, and tag `v1.0`.

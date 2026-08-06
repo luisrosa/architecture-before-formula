@@ -1,0 +1,26 @@
+# Clean-build workspace
+.build/
+
+# LaTeX products in the source directory
+paper/*.aux
+paper/*.bbl
+paper/*.bcf
+paper/*.blg
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.out
+paper/*.run.xml
+paper/*.synctex.gz
+paper/*.toc
+paper/main.pdf
+paper/supplement.pdf
+
+# Python and editor products
+__pycache__/
+*.pyc
+.DS_Store
+*.swp
+*.swo
+.vscode/
+.idea/

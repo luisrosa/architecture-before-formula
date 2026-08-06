@@ -1,0 +1,103 @@
+\section{Architecture as marked receiver-wise factorization}\label{sec:introduction}
+
+A learned formula does not begin from no organization. Its domain and codomain are already represented state spaces; its output may already be resolved into separately addressed obligations; and its computation may already restrict what each obligation can use. Yet the external map alone does not record those distinctions. Two systems can realize the same $F:X\to Y$ while differing in whether one receiver sees the entire predecessor state, a fixed neighborhood, a state-conditioned aggregate, a persistent summary, or a source-resolved family of contributions. Architecture begins where these differences are marked rather than inferred from extensional behavior.
+
+This paper is conditional on a represented update
+\[
+F:X\longrightarrow Y.
+\]
+It does not derive represented states, process cuts, or primitive update events. Those belong to a more general theory of represented processes. The narrower question here is:
+\begin{quote}
+\textbf{What additional marked structure turns a represented update into a receiver-organized architecture, and which restrictions recover the standard Transformer block?}
+\end{quote}
+
+The answer is a receiver-wise factorization. A marked presentation of the successor state identifies receiver branches
+\[
+B_j:X\to W_j.
+\]
+An architectural presentation then marks, for every receiver $j$, a factorization
+\begin{equation}\label{eq:intro-central-factorization}
+\boxed{
+B_j
+=
+G_jQ_j,
+\qquad
+X\xrightarrow{Q_j}Z_j\xrightarrow{G_j}W_j.
+}
+\end{equation}
+The map $Q_j$ is the receiver interface: it determines which predecessor distinctions reach receiver $j$. The map $G_j$ is the receiver-local continuation: it determines what that receiver constructs from the information it receives. Neither map is recoverable uniquely from $B_j$, because arbitrary intermediate factorizations can realize the same branch. They are therefore marked architectural data.
+
+This single factorization organizes the Transformer reconstruction in two directions:
+\[
+\boxed{
+\begin{aligned}
+Q_j
+&\rightsquigarrow
+\text{retained local state, source-resolved routing, attention, and aggregation},\\
+G_j
+&\rightsquigarrow
+\text{residual continuation, normalization, and the pointwise FFN}.
+\end{aligned}}
+\]
+Attention is not taken as a primitive relation or a universal form of state-conditioned computation. It is derived after the transported component of $Q_j$ is restricted to finite source-resolved additive contributions, positive scalar evidence, receiver-row normalization, source-local values, and one shared finite-rank score family. The effective-potential interpretation appears still later, as a logarithmic coordinate on that positive scalar routing law. The FFN is reconstructed differently: its hidden coordinates are architectural because the specified local continuation contains a marked intermediate activation vector, not merely because an arbitrary output map can be written as a formal sum.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=12mm and 15mm,
+  box/.style={draw,rounded corners,inner sep=5pt,align=center},
+  arr/.style={-{Latex[length=2mm]},thick}
+]
+\node[box] (x) {$X$\\represented predecessor state};
+\node[box,right=of x] (q) {$Z_j$\\receiver interface $Q_j$};
+\node[box,right=of q] (w) {$W_j$\\receiver obligation};
+\draw[arr] (x) -- node[above] {$Q_j$} (q);
+\draw[arr] (q) -- node[above] {$G_j$} (w);
+\node[box,below=of q] (p) {$\bigl(L_j,\Agg_jP_j\bigr)$\\local state + aggregate exposure};
+\draw[arr] (x) |- node[pos=.23,left] {$P_j$} (p);
+\draw[arr] (p) -- node[right] {identified with $Z_j$} (q);
+\node[above=7mm of q] (b) {$B_j=\pi_j\chi_YF=G_jQ_j$};
+\end{tikzpicture}
+\caption{The paper's foundational object. Routing and aggregation refine the receiver interface $Q_j$; the FFN refines the local continuation $G_j$.}
+\label{fig:central-factorization}
+\end{figure}
+
+\subsection{Why the factorization must be marked}
+
+Every branch admits the trivial full-access factorization $B_j=B_j\Id_X$. It also admits a canonical quotient that retains only the equivalence class needed to reproduce that branch. Neither extreme identifies the interface used by the architecture. Likewise, an invertible recoding of the total state may preserve the external map while mixing the coordinates that previously defined receiver-local access. Architecture is therefore not a property of the bare function alone. It is a property of a function together with marked receiver obligations and marked intermediate factorizations.
+
+This is also why the present paper stops before implementation warrant and mechanism identity. An exact factorization may be mathematically valid without descending from an independently specified implementation interface, remaining stable under the scientific operations of interest, or licensing intervention and tracking claims. Establishing those stronger claims requires additional implementation-facing and evidential structure not assumed here.
+
+\subsection{Provenance without a second ontology}
+
+The paper distinguishes the semantic origin of arguments from actual dependence on them. A schema may permit an architectural component
+\[
+c(B,\xi,\theta,H)
+\]
+to use schema structure $B$, instance data $\xi$, parameters $\theta$, and current represented state $H$. These argument types are marked. Whether a trained component genuinely varies with one argument over a declared domain is then derived by counterfactual variation. Thus
+\[
+\text{permitted state dependence}
+\neq
+\text{realized state dependence}
+\neq
+\text{variation observed on one restricted window}.
+\]
+Endogenization replaces a supplied or state-independent slot by a same-typed state-conditioned constructor. Restriction narrows the admissible family of values or maps. The standard Transformer performs both moves: it endogenizes receiver-relative allocation while restricting the construction to a specific pairwise, positive, row-normalized, finite-rank, additive form.
+
+\subsection{Contributions}
+
+The paper makes four connected contributions.
+
+\begin{enumerate}[label=(\arabic*)]
+\item \textbf{Receiver-factored architecture.} It defines a complete typed architectural presentation for a represented update, proves that receiver indexing with full shared access collapses to one product-valued map, distinguishes the canonical answer quotient from the marked interface, and orders interfaces by refinement.
+
+\item \textbf{Interface refinement and barriers.} It derives the local-state/exposure split and the source-resolved/aggregate distinction from refinements of $Q_j$. Interface fibers yield exact factorization criteria, deterministic approximation lower bounds, and a squared-loss decomposition into unresolved variation and restricted local accessibility.
+
+\item \textbf{Transformer reconstruction.} It derives additive state-indexed operator families, then recovers masked query--key softmax attention under explicit additional commitments. In the positive scalar regime, it proves the receiver-relative effective-potential and free-energy representation and the log-sum-exp law induced by exact source-carrier quotienting. On the continuation side, it identifies the marked hidden activation coordinates of the FFN and reconstructs the canonical block at coarse and fine architectural grains.
+
+\item \textbf{Architectural coordinates and boundary.} It separates general factorization coordinates from the potential-centered coordinates available only to positive scalar routing, compares neighboring architectures without reducing them to function classes, gives a compact variable-successor extension, and identifies the additional evidence obligations required for stronger implementation-facing and mediation claims.
+\end{enumerate}
+
+\subsection{Scope}
+
+The reconstruction is rational rather than historical. It does not claim that Transformers were discovered by successively adding the assumptions listed here, that the standard block is inevitable, or that every state-conditioned interface is attention. It makes no empirical universality claim and does not require experiments to establish its conceptual or mathematical results. Its central claim is conditional: once a represented update and receiver presentation are fixed, the declared factorization identifies the architecture; once further restrictions are imposed on the interface and continuation, the familiar Transformer form follows.

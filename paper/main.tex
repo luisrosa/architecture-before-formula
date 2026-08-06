@@ -1,0 +1,39 @@
+\input{preamble}
+
+\title{\textbf{Architecture Before the Formula}\\
+\large Receiver-Wise Factorization and the Reconstruction of Transformer Blocks}
+\author{Luis F. Rosario Freytes\\University of Michigan, Ann Arbor}
+\date{Working preprint v1.0 --- August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Neural architectures are usually introduced by formulas, but a represented input--output map does not by itself determine which successor obligations are separately addressed, what information reaches each receiver, or how the resulting local continuation is organized. We define an architecture, conditional on a represented update $F:X\to Y$, as a marked receiver-wise factorization. A marked presentation of the successor state determines receiver branches $B_j$, and an architectural presentation specifies factorizations $B_j=G_jQ_j$, where $Q_j$ is the information made available to receiver $j$ and $G_j$ is its local continuation. This object yields a full-access collapse theorem, a canonical answer quotient that is extensionally sufficient but not architecturally identifying, a refinement preorder on interfaces, and exact and approximate barriers induced by interface fibers. Refining $Q_j$ into retained local state, source-resolved contributions, and aggregation separates what is computed source by source from the receiver macrostate that survives. In an additive linear regime, the refinement produces a state-indexed operator family. Under further commitments---pairwise scalar evidence, positive compositional linking, receiver-row anchoring, source-local payloads, additive aggregation, and one shared finite-separation-rank score family---the receiver interface takes the form of masked query--key softmax attention. In this positive scalar specialization, the routing law also admits receiver-relative effective-potential and free-energy coordinates. The pointwise feedforward sublayer is reconstructed on the other side of the factorization: its marked intermediate activation coordinates refine the receiver-local continuation $G_j$. A canonical PreNorm Transformer block is therefore a coarse attention-constructed receiver interface followed by a structured local continuation, with a finer two-sublayer presentation available when the intermediate residual state is marked. The framework identifies general architectural coordinates, distinguishes provenance typing from realized dependence, and states the additional evidence required to pass from an exact architectural presentation to an implementation-facing mechanism claim. A compact extension allows the marked successor presentation itself to vary across receiver sectors.
+\end{abstract}
+
+\paragraph{Assistance disclosure.}
+Large language models were used as assistive tools for formalization, literature search, code and typesetting support, and language editing. The author supplied the conceptual program and retains responsibility for verifying the arguments, references, and wording before submission.
+
+\paragraph{Masked-score convention.}
+A finite pair score is required only on the admissible receiver--source relation. Hard exclusion is represented by a separate mask. Any finite extension off the admissible relation is mathematically immaterial because masked coefficients are set to zero.
+
+\paragraph{Squared-loss convention.}
+Conditional-expectation and squared-loss statements use finite-dimensional Euclidean-valued random targets with finite second moment; every compared predictor is square-integrable on the declared interface.
+
+\input{sections/01_introduction}
+\input{sections/02_receiver_factored_foundation}
+\input{sections/03_interface_refinement}
+\input{sections/04_provenance_and_routing}
+\input{sections/05_attention_normal_form}
+\input{sections/06_local_continuation_ffn}
+\input{sections/07_full_block}
+\input{sections/08_coordinates_and_comparisons}
+\input{sections/09_variable_population}
+\input{sections/10_mechanism_boundary}
+\input{sections/11_conclusion}
+
+\bibliographystyle{plainnat}
+\bibliography{references,references_additions}
+
+\end{document}

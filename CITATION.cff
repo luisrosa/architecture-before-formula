@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: "Please cite the paper described in preferred-citation."
+title: "Architecture Before the Formula source repository"
+type: software
+authors:
+  - family-names: "Rosario Freytes"
+    given-names: "Luis F."
+    affiliation: "University of Michigan, Ann Arbor"
+version: "1.0"
+date-released: "2026-08-06"
+license: CC-BY-4.0
+repository-code: "https://github.com/luisrosa/architecture-before-formula"
+abstract: >-
+  Source, compiled artifacts, and validation materials for a philosophical and
+  mathematical reconstruction of neural architecture as a marked receiver-wise
+  factorization of a represented update.
+keywords:
+  - Transformers
+  - attention
+  - neural architecture
+  - receiver interface
+  - receiver-wise factorization
+  - information flow
+  - aggregation
+  - effective potential
+  - feedforward networks
+  - philosophy of machine learning
+preferred-citation:
+  type: article
+  title: "Architecture Before the Formula: Receiver-Wise Factorization and the Reconstruction of Transformer Blocks"
+  authors:
+    - family-names: "Rosario Freytes"
+      given-names: "Luis F."
+  year: 2026
+  month: 8
+  version: "1.0"
+  notes: "Working preprint"

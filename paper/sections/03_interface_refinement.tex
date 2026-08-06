@@ -1,0 +1,220 @@
+\section{Refining receiver interfaces: source resolution, aggregation, and barriers}\label{sec:interface-refinement}
+
+The architectural object of \Cref{def:receiver-factored-architecture} does not assume that every interface has the same internal form. This section introduces two successive refinements that are central to residual routed architectures:
+\[
+Q_j
+\rightsquigarrow
+\langle L_j,E_j\rangle
+\rightsquigarrow
+\left\langle L_j,\Agg_jP_j\right\rangle.
+\]
+The first distinguishes receiver-local state from transported exposure. The second distinguishes source-resolved computation from the macrostate retained after aggregation.
+
+\subsection{Retained local state and transported exposure}
+
+\begin{definition}[Local-state/exposure refinement]\label{def:local-exposure-refinement}
+A receiver interface $Q_j:X\twoheadrightarrow Z_j$ has a local-state/exposure refinement when there are maps
+\[
+L_j:X\to U_j,
+\qquad
+E_j:X\to Z_j^{\mathrm{exp}},
+\]
+and a bijection from the realized image of $\langle L_j,E_j\rangle$ to $Z_j$ under which $Q_j$ is identified with
+\[
+Q_j\cong\langle L_j,E_j\rangle.
+\]
+If no separately retained local state is marked, take $U_j$ to be a singleton.
+\end{definition}
+
+For a same-carrier residual block, $L_i(H)=h_i$. The exposure $E_i(H)$ is the additional state transported or constructed from the represented source family. The distinction is architectural: the same aggregate may lead to a different successor when the bypassed local state differs.
+
+\subsection{Source-resolved refinement}
+
+\begin{definition}[Source-resolved receiver refinement]\label{def:source-resolved-refinement}
+The transported exposure $E_j:X\to Z_j^{\mathrm{exp}}$ has a source-resolved refinement when there are
+\[
+P_j:X\to\mathcal M_j,
+\qquad
+\Agg_j:\mathcal M_j\to Z_j^{\mathrm{exp}}
+\]
+such that
+\[
+E_j=\Agg_jP_j.
+\]
+For a finite source set $S$, a common realized presentation is
+\[
+P_j(H)=\bigl(m_{ji}(H)\bigr)_{i\in S},
+\]
+where each $m_{ji}(H)$ is a typed contribution to receiver $j$ from source $i$.
+\end{definition}
+
+The three objects
+\[
+P_j(H),
+\qquad
+\Agg_jP_j(H),
+\qquad
+Q_j(H)\cong\bigl(L_j(H),\Agg_jP_j(H)\bigr)
+\]
+must remain distinct. The first preserves source resolution. The second is the transported receiver macrostate. The third is the complete information available to the receiver-local continuation.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=10mm and 12mm,
+  box/.style={draw,rounded corners,inner sep=4pt,align=center},
+  arr/.style={-{Latex[length=2mm]},thick}
+]
+\node[box] (x) {$X$};
+\node[box,right=of x] (p) {$\mathcal M_j$\\source-resolved $P_j$};
+\node[box,right=of p] (e) {$Z_j^{\mathrm{exp}}$\\aggregate exposure};
+\node[box,right=of e] (q) {$Z_j$\\complete interface};
+\node[box,right=of q] (w) {$W_j$};
+\draw[arr] (x) -- node[above] {$P_j$} (p);
+\draw[arr] (p) -- node[above] {$\Agg_j$} (e);
+\draw[arr] (e) -- node[above] {combine with $L_j$} (q);
+\draw[arr] (q) -- node[above] {$G_j$} (w);
+\draw[arr] (x) to[bend right=34] node[below] {$L_j$} (q);
+\end{tikzpicture}
+\caption{Source resolution, aggregation, and the complete receiver interface. Every many-to-one arrow creates a possible identification barrier for later continuations.}
+\label{fig:interface-refinement}
+\end{figure}
+
+\subsection{A concrete aggregation collision}
+
+\begin{example}[A moment can erase source-resolved variation]\label{ex:aggregation-collision}
+Let
+\[
+P(x_1,x_2)=(x_1,x_2),
+\qquad
+\Agg(x_1,x_2)=x_1+x_2.
+\]
+Then $(1,-1)$ and $(0,0)$ have the same aggregate, but the source-resolved target
+\[
+f(x_1,x_2)=x_1^2+x_2^2
+\]
+takes values $2$ and $0$. No continuation that receives only $x_1+x_2$ can reproduce $f$ on both inputs.
+\end{example}
+
+The example is not a criticism of aggregation. A sum may be the intended sufficient statistic. It identifies the exact question: which target distinctions vary inside the fibers of the retained exposure?
+
+\subsection{Exact and approximate barriers at the aggregate cut}
+
+Let
+\[
+P:X\to\mathcal M,
+\qquad
+\Agg:\mathcal M\to Z,
+\qquad
+E:=\Agg P.
+\]
+Corestrict $E$ to its realized image so that $E:X\twoheadrightarrow Z$ is surjective.
+
+\begin{theorem}[Exact aggregation-fiber obstruction]\label{thm:aggregation-fiber}
+For every continuation $G:Z\to W$,
+\[
+E(x)=E(x')
+\Longrightarrow
+G(E(x))=G(E(x')).
+\]
+No continuation after the aggregate cut can distinguish predecessor states identified by $E$.
+\end{theorem}
+
+\begin{proof}
+Apply the same function $G$ to the equal interface values.
+\end{proof}
+
+The theorem is elementary but architecturally decisive. A receiver may compute a large source-resolved family while retaining only one fixed-dimensional statistic. Computation breadth does not imply source-resolved access by the next local continuation.
+
+\begin{definition}[Target variation along interface fibers]\label{def:fiber-variation}
+Let $(W,d)$ be a metric space and $f:X\to W$. Define
+\[
+\Delta_E(f)
+:=
+\sup_{z\in Z}\diam f(E^{-1}(z))
+=
+\sup_{E(x)=E(x')}d(f(x),f(x')).
+\]
+\end{definition}
+
+\begin{theorem}[Deterministic approximation lower bound]\label{thm:deterministic-lower-bound}
+For every $G:Z\to W$,
+\[
+\boxed{
+\sup_{x\in X}d\bigl(f(x),G(E(x))\bigr)
+\ge
+\frac12\Delta_E(f).
+}
+\]
+\end{theorem}
+
+\begin{proof}
+Fix $x,x'$ with $E(x)=E(x')=:z$. By the triangle inequality,
+\[
+d(f(x),f(x'))
+\le d(f(x),G(z))+d(G(z),f(x')).
+\]
+At least one term on the right is at least half the left side. Take the supremum over common-fiber pairs.
+\end{proof}
+
+\begin{corollary}[Exact recoverability criterion]\label{cor:exact-recoverability}
+There exists $G:Z\to W$ with $f=GE$ if and only if $\Delta_E(f)=0$.
+\end{corollary}
+
+\begin{proof}
+The forward direction is immediate. The reverse direction follows from \Cref{lem:fiber-factorization} because $f$ is constant on every $E$-fiber.
+\end{proof}
+
+\begin{proposition}[Aggregation cannot improve target resolution]\label{prop:aggregation-monotonicity}
+If $E=\Agg P$, then
+\[
+\Delta_E(f)\ge\Delta_P(f).
+\]
+\end{proposition}
+
+\begin{proof}
+Every $P$-fiber is contained in an $E$-fiber, so taking the supremum over the coarser $E$-fibers cannot decrease the target diameter.
+\end{proof}
+
+These statements separate interface revision from continuation revision. Enlarging $G$ can improve how the retained interface is used; it cannot recover a distinction absent from $E$.
+
+\subsection{Unresolved variation and restricted local accessibility}
+
+Exact fibers isolate information availability. A separate defect arises when the chosen local continuation family cannot use all distinctions retained by the interface.
+
+Let $(H,Y)$ be square-integrable random variables, let $Z=E(H)$, and let $\mathcal G$ be a class of measurable maps $g$ with $\E\norm{g(Z)}^2<\infty$.
+
+\begin{theorem}[Squared-loss unresolved-variation/accessibility decomposition]\label{thm:squared-decomposition}
+Let $m(Z):=\E[Y\mid Z]$. Then
+\[
+\boxed{
+\inf_{g\in\mathcal G}\E\norm{Y-g(Z)}^2
+=
+\E\norm{Y-m(Z)}^2
++
+\inf_{g\in\mathcal G}\E\norm{m(Z)-g(Z)}^2.
+}
+\]
+\end{theorem}
+
+\begin{proof}
+For any $g\in\mathcal G$,
+\[
+Y-g(Z)=(Y-m(Z))+(m(Z)-g(Z)).
+\]
+The cross term in the squared norm has expectation zero because $m(Z)-g(Z)$ is $Z$-measurable and $\E[Y-m(Z)\mid Z]=0$. Taking the infimum proves the identity.
+\end{proof}
+
+The first term is irreducible given the receiver interface: target variation remains unresolved inside its fibers. The second term is an accessibility defect of the declared local family. In a Transformer, enlarging the FFN may reduce the second term but not the first. This is the precise sense in which the interface and the local continuation are different architectural resources.
+
+\subsection{Information accounting}
+
+For finite-valued random variables, a deterministic quotient also admits the exact identity
+\[
+I(Y;P(H))
+=
+I(Y;E(H))
++
+I\bigl(Y;P(H)\mid E(H)\bigr).
+\]
+The conditional term measures target-relevant evidence present in the source-resolved presentation but absent from the retained aggregate. The proof is the mutual-information chain rule and is recorded in the technical supplement. The distribution-free fiber theorems remain primary because they do not depend on a probability law or a selected target distribution.
