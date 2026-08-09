@@ -8,7 +8,7 @@
 
 This repository snapshot was constructed from the previously validated receiver-factorization manuscript, promoted to v1.0, flattened into a version-local source tree, and rebuilt from clean source. No mathematical theorem, definition, proof, assumption, citation, or substantive argument was changed during the export. The only manuscript edits were release labels, bibliography paths, and one duplicated PDF keyword.
 
-The exact GitHub commit SHA and workflow-run identifiers will be recorded after this snapshot is initialized in the new private repository and passes its first Actions run.
+Repository-level provenance is carried by the immutable Git commit or tag being inspected, its associated GitHub Actions run, and the release hashes in `releases/v1.0/SHA256SUMS.txt`. Those identifiers are intentionally not duplicated as a commit hash inside this source file, which would make the recorded commit self-referential.
 
 ## Local export evidence
 
@@ -56,4 +56,4 @@ The clean source ZIP hash is recorded alongside the release artifacts rather tha
 
 ## Continuous validation
 
-`.github/workflows/validate-paper.yml` validates the exact repository tree on every pull request and push to `main`. After initialization, the final release audit should add the exact merged commit SHA, workflow run, artifact digest, and tag `v1.0`.
+`.github/workflows/validate-paper.yml` validates the exact repository tree on every pull request and push to `main`. The workflow rebuilds the paper and supplement, audits LaTeX diagnostics and semantic references, checks PDF structure with `qpdf`, renders every page, rebuilds the clean source package, and uploads the validated artifacts. Exact remote provenance is therefore read from the commit or release tag together with its associated Actions run; release-file identity is recorded by the committed SHA-256 manifest.
