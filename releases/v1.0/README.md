@@ -14,3 +14,5 @@ Release artifacts for the first maintained public release.
 `328ea750c2cbb3163d0ed172c50f29ca4e425d5d7d600ea19eefded77eb38244` - clean source package
 
 The source ZIP excludes compiled PDFs, generated LaTeX products, release artifacts, repository history, and CI-only files. It is built deterministically from the maintained source tree and audited in CI.
+
+These files are the frozen v1.0 release artifacts. Current-source rebuilds are validated independently for structure and semantics; byte-identical PDF output across moving TeX environments is not part of the release claim.
