@@ -14,16 +14,16 @@ Repository-level provenance is carried by the immutable Git commit or tag being 
 
 | Item | Value |
 |---|---|
-| Main article | 30 pages; SHA-256 `96ed045645855c8dd245f138f3d1e8951e886370b002e15a036c2467139e764d` |
-| Technical supplement | 14 pages; SHA-256 `4e8bc10a07c581112ab2fb5958b38d4155ae97c90ea5c6df927c3a6e7917bd45` |
+| Main article | 30 pages; exact release SHA-256 recorded in `releases/v1.0/SHA256SUMS.txt` |
+| Technical supplement | 14 pages; exact release SHA-256 recorded in `releases/v1.0/SHA256SUMS.txt` |
 | Build environment | GitHub Actions `xu-cheng/latex-action@v3`; exact runner/toolchain provenance is carried by the associated workflow run |
 | Source layout | current source contained entirely in `paper/` |
 | Bibliography | local `paper/references.bib` and `paper/references_additions.bib` |
 | Font embedding | all fonts embedded in both PDFs |
 | Rasterization | every page of both generated and committed release PDFs renders successfully |
-| Source package | generated deterministically from the maintained repository tree and audited for generated/binary build products |
+| Source package | generated deterministically from the maintained repository tree and audited for generated/binary build products; exact release SHA-256 recorded in `releases/v1.0/SHA256SUMS.txt` |
 
-The clean source ZIP hash is recorded alongside the release artifacts rather than inside the archive, avoiding a self-referential package.
+Exact artifact hashes live only in the release manifest and release directory documentation. Keeping build-specific hashes out of this source-packaged validation record avoids coupling the source archive to non-byte-reproducible PDF metadata from a moving TeX environment.
 
 ## Formal invariants
 
