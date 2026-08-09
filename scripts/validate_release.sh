@@ -80,4 +80,11 @@ python "$ROOT/scripts/package_source.py" \
 
 cp "$ROOT/paper/main.pdf" "$ARTIFACT_DIR/Architecture_Before_the_Formula_v1.0.pdf"
 cp "$ROOT/paper/supplement.pdf" "$ARTIFACT_DIR/Architecture_Before_the_Formula_v1.0_Technical_Supplement.pdf"
-sha256sum "$ARTIFACT_DIR"/* > "$ARTIFACT_DIR/SHA256SUMS.txt"
+(
+  cd "$ARTIFACT_DIR"
+  sha256sum \
+    Architecture_Before_the_Formula_v1.0.pdf \
+    Architecture_Before_the_Formula_v1.0_Technical_Supplement.pdf \
+    Architecture_Before_the_Formula_v1.0_Source.zip \
+    > SHA256SUMS.txt
+)
