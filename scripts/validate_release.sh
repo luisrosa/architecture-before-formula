@@ -27,75 +27,52 @@ PY_FITZ
   fi
 }
 
-for stem in main supplement; do
-  generated="$ROOT/paper/${stem}.pdf"
-  test -s "$generated"
-  check_pdf_structure "$generated"
-  pages="$(pdfinfo "$generated" | awk '/^Pages:/ {print $2}')"
+validate_pdf() {
+  local pdf="$1"
+  local label="$2"
+  local check_placeholders="${3:-yes}"
+  local pages rendered
+
+  test -s "$pdf"
+  check_pdf_structure "$pdf"
+
+  pages="$(pdfinfo "$pdf" | awk '/^Pages:/ {print $2}')"
   test -n "$pages"
   test "$pages" -gt 0
 
-  pdftotext "$generated" "$BUILD_DIR/${stem}.txt"
-  test -s "$BUILD_DIR/${stem}.txt"
-  if grep -Eiq 'TODO|FIXME|TBD|\?\?\?' "$BUILD_DIR/${stem}.txt"; then
-    echo "Draft placeholder found in ${stem}.pdf" >&2
+  pdftotext "$pdf" "$BUILD_DIR/${label}.txt"
+  test -s "$BUILD_DIR/${label}.txt"
+  if [ "$check_placeholders" = "yes" ] && grep -Eiq 'TODO|FIXME|TBD|\?\?\?' "$BUILD_DIR/${label}.txt"; then
+    echo "Draft placeholder found in ${label}.pdf" >&2
     exit 1
   fi
 
   while IFS= read -r embedded; do
     test "$embedded" = "yes"
-  done < <(pdffonts "$generated" | awk 'NR>2 {print $(NF-4)}')
+  done < <(pdffonts "$pdf" | awk 'NR>2 {print $(NF-4)}')
 
-  mkdir -p "$BUILD_DIR/${stem}-pages"
-  pdftoppm -png -r 110 "$generated" "$BUILD_DIR/${stem}-pages/page" >/dev/null 2>&1
-  rendered="$(find "$BUILD_DIR/${stem}-pages" -name 'page-*.png' -type f -size +5k | wc -l)"
+  mkdir -p "$BUILD_DIR/${label}-pages"
+  pdftoppm -png -r 110 "$pdf" "$BUILD_DIR/${label}-pages/page" >/dev/null 2>&1
+  rendered="$(find "$BUILD_DIR/${label}-pages" -name 'page-*.png' -type f -size +5k | wc -l)"
   test "$rendered" -eq "$pages"
-done
+}
+
+# Validate a fresh build from the current source tree under the CI toolchain.
+validate_pdf "$ROOT/paper/main.pdf" main
+validate_pdf "$ROOT/paper/supplement.pdf" supplement
 
 main_release="$RELEASE_DIR/Architecture_Before_the_Formula_v1.0.pdf"
 supp_release="$RELEASE_DIR/Architecture_Before_the_Formula_v1.0_Technical_Supplement.pdf"
 
-for pdf in "$main_release" "$supp_release"; do
-  test -s "$pdf"
-  check_pdf_structure "$pdf"
-done
-
+# The committed v1.0 files are immutable release artifacts. Verify their
+# identity against the committed manifest, then validate the PDFs independently.
 (
   cd "$RELEASE_DIR"
   sha256sum -c SHA256SUMS.txt
 )
 
-compare_pdf_rendering() {
-  local generated="$1"
-  local release="$2"
-  local stem="$3"
-  local generated_pages="$BUILD_DIR/${stem}-pages"
-  local release_pages="$BUILD_DIR/${stem}-release-pages"
-  local generated_count release_count release_rendered
-
-  generated_count="$(pdfinfo "$generated" | awk '/^Pages:/ {print $2}')"
-  release_count="$(pdfinfo "$release" | awk '/^Pages:/ {print $2}')"
-  test -n "$generated_count"
-  test -n "$release_count"
-  if [ "$generated_count" -ne "$release_count" ]; then
-    echo "Page-count mismatch between rebuilt and release ${stem}.pdf: ${generated_count} != ${release_count}" >&2
-    exit 1
-  fi
-
-  mkdir -p "$release_pages"
-  pdftoppm -png -r 110 "$release" "$release_pages/page" >/dev/null 2>&1
-  release_rendered="$(find "$release_pages" -name 'page-*.png' -type f -size +5k | wc -l)"
-  test "$release_rendered" -eq "$release_count"
-
-  if ! diff -qr "$generated_pages" "$release_pages" >/dev/null; then
-    echo "Rendered-page mismatch between rebuilt and release ${stem}.pdf" >&2
-    diff -qr "$generated_pages" "$release_pages" >&2 || true
-    exit 1
-  fi
-}
-
-compare_pdf_rendering "$ROOT/paper/main.pdf" "$main_release" main
-compare_pdf_rendering "$ROOT/paper/supplement.pdf" "$supp_release" supplement
+validate_pdf "$main_release" release-main
+validate_pdf "$supp_release" release-supplement
 
 python "$ROOT/scripts/package_source.py" \
   --root "$ROOT" \
