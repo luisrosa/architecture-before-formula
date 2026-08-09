@@ -14,14 +14,13 @@ Receiver-row anchoring requires at least one admissible source. If a row has emp
 \end{itemize}
 Softmax does not define the empty-row case by itself.
 
-A mask can have different provenance:
+In the main attention normal form, the hard mask is fixed with respect to the represented state $H$ on the declared domain. Its marked provenance may still be:
 \begin{itemize}
 \item schema-fixed, as in a causal order;
 \item instance-supplied, as in padding or a graph;
-\item parameter-dependent but state-independent;
-\item state-generated, as in hard dynamic routing.
+\item parameter-dependent but state-independent.
 \end{itemize}
-The attention normal form permits any declared mask with nonempty rows. The provenance profile distinguishes the corresponding schemas even when two masks agree on a selected state window.
+The theorem permits any such declared mask with nonempty rows. A state-generated mask $M_{ri}(H)$ is a neighboring dynamic-support regime: the same row formula may be applied on each realized support, but support endogenization is then an additional architectural commitment rather than part of the fixed-mask theorem.
 
 \subsection{Temperature and hard routing}
 
