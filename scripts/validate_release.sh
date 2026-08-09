@@ -60,12 +60,42 @@ for pdf in "$main_release" "$supp_release"; do
   check_pdf_structure "$pdf"
 done
 
-normalize_text() {
-  pdftotext "$1" - | tr '\n\r\t' '   ' | tr -s '[:space:]' ' '
+(
+  cd "$RELEASE_DIR"
+  sha256sum -c SHA256SUMS.txt
+)
+
+compare_pdf_rendering() {
+  local generated="$1"
+  local release="$2"
+  local stem="$3"
+  local generated_pages="$BUILD_DIR/${stem}-pages"
+  local release_pages="$BUILD_DIR/${stem}-release-pages"
+  local generated_count release_count release_rendered
+
+  generated_count="$(pdfinfo "$generated" | awk '/^Pages:/ {print $2}')"
+  release_count="$(pdfinfo "$release" | awk '/^Pages:/ {print $2}')"
+  test -n "$generated_count"
+  test -n "$release_count"
+  if [ "$generated_count" -ne "$release_count" ]; then
+    echo "Page-count mismatch between rebuilt and release ${stem}.pdf: ${generated_count} != ${release_count}" >&2
+    exit 1
+  fi
+
+  mkdir -p "$release_pages"
+  pdftoppm -png -r 110 "$release" "$release_pages/page" >/dev/null 2>&1
+  release_rendered="$(find "$release_pages" -name 'page-*.png' -type f -size +5k | wc -l)"
+  test "$release_rendered" -eq "$release_count"
+
+  if ! diff -qr "$generated_pages" "$release_pages" >/dev/null; then
+    echo "Rendered-page mismatch between rebuilt and release ${stem}.pdf" >&2
+    diff -qr "$generated_pages" "$release_pages" >&2 || true
+    exit 1
+  fi
 }
 
-diff -u <(normalize_text "$ROOT/paper/main.pdf") <(normalize_text "$main_release")
-diff -u <(normalize_text "$ROOT/paper/supplement.pdf") <(normalize_text "$supp_release")
+compare_pdf_rendering "$ROOT/paper/main.pdf" "$main_release" main
+compare_pdf_rendering "$ROOT/paper/supplement.pdf" "$supp_release" supplement
 
 python "$ROOT/scripts/package_source.py" \
   --root "$ROOT" \
