@@ -62,7 +62,15 @@ c_F(H)\in\mathfrak C
 \qquad\text{and}\qquad
 F(H)\in Y_{c_F(H)}.
 \]
-The first coordinate selects the receiver presentation; the second supplies content inside that presentation. Identifying the sector label with the complete successor state would erase this distinction. Within the selected sector, the receiver-factorization definitions of \Cref{sec:receiver-foundation} apply to the branch maps of $Y_{c_F(H)}$.
+The first coordinate selects the receiver presentation; the second supplies content inside that presentation. Identifying the sector label with the complete successor state would erase this distinction. For each $c\in\mathfrak C$, define the sector domain
+\[
+X_c:=c_F^{-1}(c).
+\]
+Whenever $X_c$ is nonempty, the restriction
+\[
+F_c:=F|_{X_c}:X_c\to Y_c
+\]
+is a fixed-sector represented update, and the receiver-factorization definitions of \Cref{sec:receiver-foundation} apply to its branch maps. Thus the variable-successor construction is a tagged family of ordinary receiver-factored updates together with the state-conditioned sector selector.
 
 For multi-token generation, one may take
 \[
