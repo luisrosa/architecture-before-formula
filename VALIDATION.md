@@ -14,8 +14,8 @@ Repository-level provenance is carried by the immutable Git commit or tag being 
 
 | Item | Value |
 |---|---|
-| Main article | 30 pages; SHA-256 `8d9d8bc623f71e2f5b05b1c0fbe7605104f6d7beb4e84ee7a7dea254304f1805` pending refresh from the final validated build |
-| Technical supplement | 14 pages; SHA-256 `e9b028b458984cec21ae6cca7454086dc7b0bb460e67972d74f78bb030028d2b` pending refresh from the final validated build |
+| Main article | 30 pages; SHA-256 `96ed045645855c8dd245f138f3d1e8951e886370b002e15a036c2467139e764d` |
+| Technical supplement | 14 pages; SHA-256 `4e8bc10a07c581112ab2fb5958b38d4155ae97c90ea5c6df927c3a6e7917bd45` |
 | Build environment | GitHub Actions `xu-cheng/latex-action@v3`; exact runner/toolchain provenance is carried by the associated workflow run |
 | Source layout | current source contained entirely in `paper/` |
 | Bibliography | local `paper/references.bib` and `paper/references_additions.bib` |
