@@ -12,7 +12,7 @@ mkdir -p "$BUILD_DIR" "$ARTIFACT_DIR"
 check_pdf_structure() {
   local pdf="$1"
   if command -v qpdf >/dev/null 2>&1; then
-    check_pdf_structure "$pdf"
+    qpdf --check "$pdf" >/dev/null
   else
     python - "$pdf" <<'PY_FITZ'
 import sys
