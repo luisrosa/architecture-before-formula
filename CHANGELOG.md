@@ -1,12 +1,12 @@
 # Changelog
 
-## v1.0 - 2026-08-06
+## v1.0 - 2026-08-09
 
 First maintained public release of the receiver-factorization formulation.
 
 - Defines architecture as a marked receiver-wise factorization of an already represented update.
 - Separates receiver interface, source-resolved computation, retained aggregation, and receiver-local continuation.
-- Derives masked query-key softmax attention under an explicit package of architectural commitments.
+- Derives masked query-key softmax attention under an explicit package of architectural commitments, including an explicit baseline/evidence-to-raw-weight link.
 - Exhibits typed neighboring constructions showing the distinct work performed by those commitments.
 - Reconstructs the FFN as a marked refinement of receiver-local continuation.
 - Reconstructs the canonical PreNorm Transformer block at coarse and fine architectural grains.

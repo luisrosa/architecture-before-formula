@@ -11,7 +11,7 @@ This audit records the mathematical, semantic, and release invariants checked fo
 4. `P_j`, `Agg_j P_j`, `Q_j`, and `G_j` remain distinct typed objects.
 5. Exact and approximate interface barriers remain prior to the attention specialization.
 6. Operator-valued pair contributions precede scalar relevance and transport.
-7. Attention remains a conditional normal form rather than a universal axiom of receiver-organized computation.
+7. Attention remains a conditional normal form rather than a universal axiom of receiver-organized computation; its positive raw weights are explicitly linked to the marked baseline and scalar evidence by `w_ri = kappa_ri psi(s_ri)` before the exponential link is derived.
 8. Every attention commitment has a typed neighboring witness in the supplement.
 9. Effective-potential language remains downstream of positive scalar routing.
 10. The actual FFN activation vector is the hidden carrier; the second residual interface is named according to its actual role.
@@ -38,9 +38,11 @@ The release pipeline verifies:
 - duplicate labels, missing references, and missing bibliography keys;
 - unresolved LaTeX or `natbib` warnings;
 - semantic `cleveref` types;
-- PDF structure, page count, metadata, extractable text, and embedded fonts;
-- successful rasterization of every page;
-- equality of normalized text between clean-source builds and committed PDFs;
+- fresh-build PDF structure, page count, extractable text, embedded fonts, and successful rasterization of every page;
+- identity of the committed v1.0 release artifacts against `releases/v1.0/SHA256SUMS.txt`;
+- independent structure, text-extraction, font-embedding, and every-page rendering checks for the committed release PDFs;
 - local README links;
 - Citation File Format metadata;
 - absence of generated files in the source package.
+
+Fresh builds and immutable release artifacts are validated as separate claims. Exact byte, glyph, or extracted-text equality across TeX environments is not asserted unless the build toolchain is pinned sufficiently to support that claim.

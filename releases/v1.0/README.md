@@ -9,8 +9,10 @@ Release artifacts for the first maintained public release.
 
 ## Checksums
 
-`8d9d8bc623f71e2f5b05b1c0fbe7605104f6d7beb4e84ee7a7dea254304f1805` - main paper  
-`e9b028b458984cec21ae6cca7454086dc7b0bb460e67972d74f78bb030028d2b` - technical supplement  
-`5f739f55be7117abeaa80116bb50c6a7f15443425240fa1c0bf23f11a38aa9b4` - clean source package
+`ac00c54111d65879e3f414ded92491bde8f3973c6ad43bd16eb1d4e68f5a36b0` - main paper  
+`471c74d266ad80d0c8eaee3bc96d4cea3eb806e6add023ee4cf3dc61f49ef685` - technical supplement  
+`328ea750c2cbb3163d0ed172c50f29ca4e425d5d7d600ea19eefded77eb38244` - clean source package
 
-The source ZIP excludes compiled PDFs, generated LaTeX products, release artifacts, repository history, and CI-only files. It is rebuilt and audited in CI.
+The source ZIP excludes compiled PDFs, generated LaTeX products, release artifacts, repository history, and CI-only files. It is built deterministically from the maintained source tree and audited in CI.
+
+These files are the frozen v1.0 release artifacts. Current-source rebuilds are validated independently for structure and semantics; byte-identical PDF output across moving TeX environments is not part of the release claim.
