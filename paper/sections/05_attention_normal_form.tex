@@ -30,22 +30,26 @@ S_r:=\{i\in S:M_{ri}=1\}
 is nonempty. Values of $\kappa_{ri}$ off the admissible support are immaterial.
 \end{assumption}
 
-The single factor $\kappa_{ri}$ contains every state-independent positive pair term that is extensionally relevant to the row. It may be decomposed into schema-, instance-, or parameter-origin factors only when those factors are independently marked. A finite additive pair bias is equivalent to multiplying $\kappa_{ri}$ by its exponential and is not counted twice.
+The single factor $\kappa_{ri}$ contains every state-independent positive pair term that is extensionally relevant to the row. It may be decomposed into schema-, instance-, or parameter-origin factors only when those factors are independently marked. A finite additive logit bias is equivalent to multiplying $\kappa_{ri}$ by its exponential and is not counted twice.
 
 \begin{assumption}[Compositional positive link]\label{ass:link}
-There is a continuous strictly increasing map
+On every admissible pair, the positive raw weight is linked to the marked baseline and scalar evidence by
+\[
+w_{ri}(H):=\kappa_{ri}\psi\!\left(s_{ri}(H)\right),
+\]
+where
 \[
 \psi:\R\to(0,\infty)
 \]
-with
+is continuous, strictly increasing, and satisfies
 \[
 \psi(a+b)=\psi(a)\psi(b).
 \]
-Thus independent additive evidence coordinates combine multiplicatively as positive raw support.
+Thus independent additive evidence increments combine multiplicatively in positive raw support.
 \end{assumption}
 
 \begin{assumption}[Receiver-row anchoring]\label{ass:row-anchor}
-For each receiver $r$, positive raw weights $(w_{ri})_{i\in S_r}$ are converted to coefficients $(\alpha_{ri})_{i\in S}$ such that:
+For each receiver $r$, the positive raw weights $(w_{ri})_{i\in S_r}$ are converted to coefficients $(\alpha_{ri})_{i\in S}$ such that:
 \begin{enumerate}[label=(\roman*)]
 \item $\alpha_{ri}=0$ for $i\notin S_r$;
 \item $\alpha_{ri}>0$ for $i\in S_r$ and $\sum_{i\in S_r}\alpha_{ri}=1$;
@@ -109,7 +113,7 @@ Let $(w_i)_{i\in A}$ be positive on a nonempty finite set. The unique positive u
 \end{lemma}
 
 \begin{proof}
-Ratio preservation implies $\alpha_i=cw_i$ for one $c>0$. Unit mass determines $c=(\sum_jw_j)^{-1}$.
+Fix $j_0\in A$ and set $c:=\alpha_{j_0}/w_{j_0}>0$. Ratio preservation gives $\alpha_i=cw_i$ for every $i\in A$ (with the $i=j_0$ case immediate). Unit mass determines $c=(\sum_jw_j)^{-1}$.
 \end{proof}
 
 Thus, on admissible pairs,
@@ -191,7 +195,7 @@ M_{ri}\kappa_{ri}
 \end{theorem}
 
 \begin{proof}
-The exponential-link lemma gives positive raw weights $\kappa_{ri}e^{s_{ri}(H)/\tau}$. The separation-rank proposition gives $s_{ri}(H)=\ip{q(x_r(H))}{k(y_i(H))}$. The row-anchor lemma gives \eqref{eq:attention-weights}, and source-local payloads with additive aggregation give \eqref{eq:attention-normal-form}.
+The compositional-link assumption and exponential-link lemma give positive raw weights $\kappa_{ri}e^{s_{ri}(H)/\tau}$. The separation-rank proposition gives $s_{ri}(H)=\ip{q(x_r(H))}{k(y_i(H))}$. The row-anchor lemma gives \eqref{eq:attention-weights}, and source-local payloads with additive aggregation give \eqref{eq:attention-normal-form}.
 \end{proof}
 
 \begin{corollary}[Standard projected attention]\label{cor:standard-attention}
@@ -203,17 +207,17 @@ k(h)=W_Kh,
 \qquad
 v_i(h)=W_Vh,
 \]
-and a finite supplied pair bias $b_{ri}$ is represented by $\kappa_{ri}=e^{b_{ri}/\tau}$ on admissible pairs, then \Cref{thm:attention-normal-form} is masked scaled dot-product attention after choosing the conventional score scale \citep{vaswani2017attention}.
+and a finite supplied additive logit bias $b_{ri}$ is represented by $\kappa_{ri}=e^{b_{ri}}$ on admissible pairs, then \Cref{thm:attention-normal-form} is masked scaled dot-product attention after choosing the conventional score scale (for example, $\tau=\sqrt d$ when the dot product is otherwise unscaled) \citep{vaswani2017attention}.
 \end{corollary}
 
-A state-dependent pair bias should instead remain in $s_{ri}(H)$. The decomposition between $\kappa$ and $s$ is provenance-relative: it is meaningful when the architecture marks which term is state-independent and which is constructed from current state.
+If a supplied bias is instead parameterized in the same pre-temperature evidence units as $s_{ri}$, say $\widetilde b_{ri}=\tau b_{ri}$, the equivalent baseline is $\kappa_{ri}=e^{\widetilde b_{ri}/\tau}$. A state-dependent pair bias should instead remain in $s_{ri}(H)$. The decomposition between $\kappa$ and $s$ is provenance-relative: it is meaningful when the architecture marks which term is state-independent and which is constructed from current state.
 
 \begin{proposition}[Converse verification]\label{prop:attention-converse}
 A standard masked single-head attention layer with at least one admissible source per receiver satisfies the assumptions above. Hence its receiver exposure has both the routed normal form and the effective-potential representation derived below.
 \end{proposition}
 
 \begin{proof}
-The layer uses finite bilinear scores on admissible pairs, positive exponentiation, rowwise normalization, source-local values, and additive aggregation. A finite mask bias can be represented by $\kappa$; forbidden pairs are represented by $M=0$.
+The layer uses finite bilinear scores on admissible pairs, positive exponentiation, rowwise normalization, source-local values, and additive aggregation. A finite additive logit bias can be represented by $\kappa$; forbidden pairs are represented by $M=0$.
 \end{proof}
 
 The theorem and converse classify a declared regime. They do not imply that every state-conditioned interface, every graph constructor, or every operator field is attention.
@@ -366,6 +370,15 @@ k'(y)=R^{-\mathsf T}k(y)
 \]
 preserve every score $\ip{q(x)}{k(y)}$.
 \end{lemma}
+
+\begin{proof}
+For every $x,y$,
+\[
+\ip{q'(x)}{k'(y)}
+=q(x)^{\mathsf T}R^{\mathsf T}R^{-\mathsf T}k(y)
+=q(x)^{\mathsf T}k(y).
+\]
+\end{proof}
 
 The potential gauge changes a landscape coordinate without changing the row. The query--key gauge changes coordinates without changing the score. Neither representation is uniquely individuated by routing behavior.
 
