@@ -8,7 +8,7 @@ import textwrap
 import zipfile
 from pathlib import Path
 
-FIXED_TIME = (2026, 8, 6, 0, 0, 0)
+FIXED_TIME = (2026, 8, 9, 0, 0, 0)
 EXCLUDED_SUFFIXES = {
     '.aux', '.bbl', '.bcf', '.blg', '.fdb_latexmk', '.fls', '.log', '.out',
     '.run.xml', '.synctex.gz', '.toc', '.pdf', '.zip', '.pyc'
