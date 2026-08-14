@@ -1,0 +1,41 @@
+\section{Related objects and identity criteria}\label{sec:related-objects}
+
+Different parts of machine learning answer ``when are these the same architecture?'' by comparing different objects. Neural architecture search starts from a declared syntactic or graph-level search space; functional equivalence identifies realized maps; representation-comparison work may quotient hidden states by a chosen transformation class; causal abstraction asks for a stronger intervention-sensitive correspondence. The present paper keeps the represented state supplied to a receiver and asks what survives when that process is reduced to coarser identity criteria.
+
+\subsection{Search spaces and realized functions}
+
+NAS-Bench-101 identifies graph-isomorphic cells \citep{ying2019nasbench}; alternative encodings of one search space can change search behavior \citep{white2020encodings}; hierarchical and grammar-generated spaces make later choices depend on earlier derivations \citep{schrodi2023hierarchical}; broader grammars enlarge the primitive vocabulary \citep{ericsson2024einspace}; and standard cell spaces can contain substantial empirical redundancy \citep{wan2022redundancy}. These approaches decide which nominal choices enter the search space before optimization begins.
+
+Our question appears after an upstream computation has already produced a represented state: do two nominal downstream choices still induce different receiver-access structures on that state? Because the downstream maps act on the reachable image of the prefix, the answer can depend on upstream representation.
+
+Function equality forgets still more. Network morphisms can change network structure while preserving the realized function \citep{wei2016networkmorphism}, and self-attention can realize convolutional functions under suitable constructions \citep{cordonnier2020relationship}. Locally,
+\[
+GQ=(GT^{-1})(TQ)
+\]
+shows that one receiver branch is compatible with many intermediate presentations. Function equality therefore cannot recover the represented process when that intermediate state is part of the architecture being compared.
+
+\subsection{Representation equivalence and extensional information}
+
+Representation similarity and identifiability make transformation ambiguity explicit. Similarity measures intentionally quotient hidden states by selected transformations, while invariance to every invertible linear map can be too coarse for some comparison tasks \citep{kornblith2019similarity}. Identifiability results can likewise recover representations only up to linear indeterminacy under suitable assumptions \citep{roeder2021linear}.
+
+An invertible correspondence settles recoverability: either presentation determines the other. It does not settle whether the conversion preserves architectural roles or whether the receiver's available continuation can use one presentation as it uses the other. Equal information and equal represented organization are different claims.
+
+At the unmarked factorization grain, the mathematics is standard. For surjective factorizations of one fixed branch, equality of interface kernels exactly classifies the factorizations up to a unique carrier isomorphism. We use that fact to locate the boundary of an extensional description. The related refinement order
+\[
+Q\preceq_DQ'
+\quad\Longleftrightarrow\quad
+\ker Q'\subseteq\ker Q
+\]
+is the familiar deterministic information order, related to broader comparison-of-experiments orders \citep{blackwell1951comparison}. Post-processing establishes recoverability; whether that post-processing is represented, mark preserving, or available to the actual continuation remains an architectural question.
+
+Network bisimulation provides a neighboring neural quotient. \citet{prabhakar2022bisimulations} partitions network nodes and constructs behavior-preserving quotient networks. The distinction shadow instead partitions predecessor \emph{states} by equality of the state presented at a receiver. It asks what that receiver can distinguish, not which network nodes can be merged.
+
+\subsection{Receiver structure, context, and stronger identity claims}
+
+Message Passing Neural Networks separate incoming aggregation from node-local update \citep{gilmer2017neural}, while Graph Networks make senders, receivers, aggregation, updates, support, and sharing explicit \citep{battaglia2018relational}. Such decompositions give concrete instances of the receiver process studied here.
+
+Categorical Deep Learning treats parametric neural architectures compositionally \citep{gavranovic2024categorical}; classical interface theories study refinement, composition, environments, and substitutability \citep{tripakis2011interfaces,broy1997compositional}. Here context is the neural composition itself: precomposition restricts a downstream receiver family to the states produced upstream and asks which predecessor distinctions remain different there.
+
+Causal abstraction asks for more by aligning internal representations with variables in a high-level causal model and testing those roles under interchange interventions \citep{geiger2022causal}. The receiver-process identity studied here stops before that stronger criterion. Reachability-sensitive restriction is also familiar in verification and systems theory, but the main witness below removes the ordinary information-loss explanation by using two injective prefixes. Recent Transformer work likewise shows that behavioral layer redundancy can depend on the comparison protocol \citep{garcia2026nofreeswap}; our comparison occurs earlier, at exact receiver distinction classes after a fixed prefix.
+
+These literatures therefore occupy different points in the identity problem. The present analysis keeps the represented receiver process before taking its extensional quotients, characterizes exactly what one such quotient preserves, and then follows that comparison through upstream composition.

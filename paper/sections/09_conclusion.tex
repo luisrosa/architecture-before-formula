@@ -1,0 +1,21 @@
+\section{Conclusion}\label{sec:conclusion-v14}
+
+What should count as the same neural architecture? The composite function is too coarse to answer that question by itself. A branch
+\[
+B_j=G_jQ_j,
+\qquad
+X\xrightarrow{Q_j}Z_j\xrightarrow{G_j}W_j
+\]
+can contract different represented intermediate processes to the same input--output map. If the state presented at the cut is part of the architecture, then architecture must be individuated before that contraction.
+
+The distinction shadow
+\[
+\mathsf D(Q_j)=\ker Q_j
+\]
+provides a controlled extensional reduction of the represented interface. It keeps exactly which predecessor states remain distinguishable. For a fixed branch with surjective interfaces, that reduction has a sharp boundary: equal shadows are exactly unmarked factorization identity up to a unique carrier re-presentation. The quotient therefore tells us what survives when presentation is forgotten, and the unique conversion tells us what was forgotten.
+
+That forgotten structure can still matter computationally. An invertible conversion may mix roles that the receiver treats as separately available, and a restricted continuation may be unable to use one presentation as it uses another without additional computation. Recoverable information and represented accessibility are not the same thing.
+
+Composition makes the identity question contextual. A downstream schema acts on the represented states produced upstream, so its effective interface is $Q_{j,\theta}A$. The local/attention construction shows the consequence cleanly: the two schemas are distinction-equivalent after one injective prefix and inequivalent after another, although neither prefix loses predecessor information. Downstream module labels therefore do not always denote context-independent architectural degrees of freedom.
+
+At the grain studied here, architecture is the represented organization through which predecessor distinctions become available to receiver-local continuation. The composite map forgets that organization; the distinction shadow captures one exact extensional quotient of it; marked roles and continuation structure recover finer architectural questions. This makes architecture comparison a problem about represented process under composition, not only about the formulas or module names used to describe a network.

@@ -1,0 +1,196 @@
+\section{Distinction loss, presentation, and continuation}\label{sec:barriers}
+
+Fiber-based impossibility results depend only on an interface's distinction shadow. A restricted continuation family can additionally depend on the form in which the surviving distinctions are presented.
+
+\subsection{Source resolution and aggregation are process structure}
+
+A receiver interface may actually compute
+\[
+Q_j(H)=\bigl(L_j(H),E_j(H)\bigr),
+\]
+with transported exposure
+\[
+P_j:X\to\mathcal M_j,
+\qquad
+\operatorname{Agg}_j:\mathcal M_j\to Z_j^{\mathrm{exp}},
+\qquad
+E_j=\operatorname{Agg}_jP_j.
+\]
+For a finite source set, $P_j(H)=(m_{ji}(H))_{i\in S}$ is a common source-resolved state. These are distinct represented cuts, even though their distinction shadows can be compared. For example,
+\[
+P(x_1,x_2)=(x_1,x_2),
+\qquad
+\operatorname{Agg}(x_1,x_2)=x_1+x_2
+\]
+identifies $(1,-1)$ and $(0,0)$ after aggregation even though $x_1^2+x_2^2$ separates them.
+
+\subsection{Fiber variation and deterministic barriers}
+
+\begin{definition}[Target variation along a distinction shadow]\label{def:fiber-variation-v13}
+For $T:X\to U$ and $f:X\to(W,d)$, define
+\[
+\Delta_T(f)
+:=
+\sup_{T(x)=T(x')}d(f(x),f(x')).
+\]
+\end{definition}
+
+This depends only on $\mathsf D(T)$.
+
+\begin{theorem}[Deterministic distinction barrier]\label{thm:deterministic-barrier-v13}
+Let $E:X\twoheadrightarrow Z$ be a receiver interface and $G:Z\to W$ any continuation. Then
+\[
+\boxed{
+\sup_{x\in X}d\bigl(f(x),G(E(x))\bigr)
+\ge
+\frac12\Delta_E(f).
+}
+\]
+An exact continuation $f=GE$ exists if and only if $\Delta_E(f)=0$.
+\end{theorem}
+
+\begin{proof}
+For $E(x)=E(x')=:z$, the triangle inequality gives
+\[
+d(f(x),f(x'))
+\le d(f(x),G(z))+d(G(z),f(x')).
+\]
+Take the supremum over common-fiber pairs. Exact recovery is equivalent to fiber constancy by \Cref{lem:fiber-factorization-v13}.
+\end{proof}
+
+\begin{proposition}[Aggregation cannot improve target resolution]\label{prop:aggregation-resolution-v13}
+If $E=\operatorname{Agg}P$, then
+\[
+\boxed{\Delta_E(f)\ge\Delta_P(f).}
+\]
+\end{proposition}
+
+\begin{proof}
+Every $P$-fiber is contained in an $E$-fiber.
+\end{proof}
+
+These exact statements are invariant under injective post-processing because it leaves the distinction shadow unchanged.
+
+\subsection{Presented interfaces and continuation transport}
+
+\begin{definition}[Attainable branch family]\label{def:attainable-branch-family-v13}
+For $Q:X\twoheadrightarrow Z$ and
+\[
+\mathcal G\subseteq\{g:Z\to W\},
+\]
+define
+\[
+\boxed{
+\mathfrak B(Q,\mathcal G)
+:=\{gQ:g\in\mathcal G\}.
+}
+\]
+\end{definition}
+
+\begin{theorem}[Continuation transport]\label{thm:continuation-transport-v13}
+Suppose $Q'=TQ$ for a bijection $T:Z\to Z'$, and let
+\[
+\mathcal G'\subseteq\{g':Z'\to W\},
+\qquad
+T^*\mathcal G':=\{g'T:g'\in\mathcal G'\}.
+\]
+Then
+\[
+\boxed{
+\mathfrak B(Q',\mathcal G')
+=
+\mathfrak B(Q,T^*\mathcal G').
+}
+\]
+Because $Q$ is surjective,
+\[
+\boxed{
+\mathfrak B(Q,\mathcal G)
+=
+\mathfrak B(Q',\mathcal G')
+\quad\Longleftrightarrow\quad
+\mathcal G=T^*\mathcal G'.
+}
+\]
+\end{theorem}
+
+\begin{proof}
+Every $g'Q'$ equals $g'TQ$. Moreover $g\mapsto gQ$ is injective on functions on $Z$ because $Q$ is surjective.
+\end{proof}
+
+Thus a bijective conversion preserves an attainable branch family only when the continuation class transports with it.
+
+\begin{example}[Invertible affine mixing can change restricted accessibility]\label{ex:affine-presentation-v13}
+Let $X=\R^2$,
+\[
+Q(u,v)=(u,v),
+\qquad
+Q'(u,v)=TQ(u,v)=(u+v,u-v).
+\]
+The linear map $T$ is invertible, so $Q\equiv_DQ'$. By \Cref{thm:affine-locality-v13}, however, both output coordinates of $T$ depend on both marked input coordinates.
+
+Let the allowed scalar continuation class be exactly the one-coordinate functions
+\[
+\mathcal G_{\mathrm{coord}}
+:=
+\{\gamma\pi_1:\gamma:\R\to\R\}
+\cup
+\{\gamma\pi_2:\gamma:\R\to\R\}.
+\]
+For the target $f(u,v)=u$, we have $f=\pi_1Q$, so
+\[
+f\in\mathfrak B(Q,\mathcal G_{\mathrm{coord}}).
+\]
+But $f\notin\mathfrak B(Q',\mathcal G_{\mathrm{coord}})$. Indeed, the first coordinate of $Q'$ is equal at $(0,0)$ and $(1,-1)$ while $f$ differs there; the second coordinate is equal at $(0,0)$ and $(1,1)$ while $f$ differs there. Hence neither coordinate alone determines $u$. Exact recovery requires cross-coordinate mixing,
+\[
+\boxed{
+u=\frac12(Q'_1+Q'_2).}
+\]
+\end{example}
+
+The example isolates the point: invertibility preserves extensional distinctions, not the locality or admissibility of the computation needed to use a given presentation.
+
+\subsection{Squared-loss distinction and continuation}
+
+Let $E:X\to Z$ be measurable, let $H$ be $X$-valued, and write $Z_H:=E(H)$. Let $Y$ be finite-dimensional Euclidean-valued with finite second moment. For a nonempty family of measurable continuations $\mathcal G$ with square-integrable outputs, define
+\[
+m_E:=\E[Y\mid\sigma(Z_H)].
+\]
+
+\begin{theorem}[Squared-loss distinction/continuation decomposition]\label{thm:squared-decomposition-v13}
+\[
+\boxed{
+\inf_{g\in\mathcal G}\E\|Y-g(Z_H)\|^2
+=
+\E\|Y-m_E\|^2
++
+\inf_{g\in\mathcal G}\E\|m_E-g(Z_H)\|^2.
+}
+\]
+\end{theorem}
+
+\begin{proof}
+For each $g$,
+\[
+Y-g(Z_H)=(Y-m_E)+(m_E-g(Z_H)),
+\]
+and the cross term has expectation zero by conditional expectation. Take the infimum.
+\end{proof}
+
+The first term is irreducible given the retained distinction structure; the second is the approximation defect of the selected continuation family on the actual presentation.
+
+\begin{corollary}[Presentation invariance of the Bayes term]\label{cor:presentation-bayes-v13}
+Suppose $E'=TE$ where $T$ is a measurable bijection on $\im E$ with measurable inverse. Then
+\[
+\sigma(E(H))=\sigma(E'(H)),
+\]
+so the Bayes term in \Cref{thm:squared-decomposition-v13} is identical for $E$ and $E'$. If continuation families satisfy
+\[
+\mathcal G=T^*\mathcal G',
+\]
+then their approximation terms and optimal squared losses are also equal. Without that transport condition, the approximation terms can differ despite identical distinction shadows.
+\end{corollary}
+
+\begin{proof}
+The measurable inverse gives both sigma-algebra inclusions. The continuation claim follows from \Cref{thm:continuation-transport-v13}.
+\end{proof}

@@ -1,0 +1,133 @@
+\section{A Transformer instance}\label{sec:transformer-realization}
+
+Nothing so far depends on attention. A standard Transformer block simply gives a familiar place to locate the represented cuts: source-resolved maps construct a receiver exposure, a coarser interface presents that exposure to a local continuation, and later blocks act on the represented state produced before them.
+
+\subsection{Source-resolved additive routing}
+
+Let $R$ be a finite receiver set and $S$ a finite source set. For source spaces $U_i$ and receiver exposure spaces $W_r$, let
+\[
+u_i:X\to U_i,
+\qquad
+C_{ri}:X\to\mathcal L(U_i,W_r).
+\]
+
+\begin{definition}[Additive routed exposure]\label{def:additive-routing-v13}
+A source-resolved additive receiver exposure is
+\[
+\boxed{E_r(H)=\sum_{i\in S}C_{ri}(H)u_i(H).}
+\]
+The source-resolved predecessor state for that aggregation is
+\[
+P_r(H)=\bigl(C_{ri}(H)u_i(H)\bigr)_{i\in S}.
+\]
+\end{definition}
+
+The composite exposure $E_r$ forgets a finer represented cut:
+\[
+X\xrightarrow{P_r}\mathcal M_r\xrightarrow{\sum}W_r.
+\]
+The kernel of the sum records which source-resolved states collide, while marked support records which sources can affect receiver $r$. A further relevance/payload factorization becomes architectural only when it is itself represented or marked.
+
+Standard masked attention is one instance of this routed form. With receiver--source scores $s_{ri}=\langle q(x_r),k(y_i)\rangle/\tau$, admissible-source mask $S_r$, positive baselines $\kappa_{ri}$, and source-local values $v_i$, the familiar coefficients are
+\[
+\alpha_{ri}
+=
+\frac{\kappa_{ri}e^{s_{ri}}}{\sum_{j\in S_r}\kappa_{rj}e^{s_{rj}}}
+\quad(i\in S_r),
+\qquad
+\alpha_{ri}=0\quad(i\notin S_r),
+\]
+and $E_r(H)=\sum_i\alpha_{ri}(H)v_i(H)$ \citep{vaswani2017attention}. Deriving this familiar formula from more primitive commitments requires assumptions about scalar evidence, positive multiplicative support, ratio-preserving row normalization, source-local values, and shared finite-rank scores; those assumptions are background to the represented-process comparison rather than part of its architecture identity criterion \citep{luce1959individual}.
+
+\subsection{Multi-head attention as represented exposure}
+
+For a nonempty finite head set $\mathcal H$, residual space $V$, and head maps
+\[
+Q_m,K_m:V\to\R^{d_m},
+\qquad
+V_m:V\to W_m,
+\qquad
+O_m:W_m\to V,
+\]
+let $N_1$ be the first receiver-local normalization and write the usual masked attention coefficients as $\alpha_{ij}^{(m)}(H)$.
+
+\begin{proposition}[Multi-head source-resolved exposure]\label{prop:multihead-v13}
+With optional receiver-local affine bias $b_{\mathrm{att}}\in V$,
+\[
+\boxed{
+t_i(H)=b_{\mathrm{att}}+
+\sum_{m\in\mathcal H}O_m
+\left(\sum_{j\in S}\alpha_{ij}^{(m)}(H)V_mN_1(h_j)\right).}
+\]
+Hence $t_i(H)$ is the aggregate of the marked head--source contributions
+\[
+\bigl(\alpha_{ij}^{(m)}(H)O_mV_mN_1(h_j)\bigr)_{(m,j)}.
+\]
+\end{proposition}
+
+\begin{proof}
+The standard output projection decomposes into block maps $O_m$; linearity distributes each block over its source sum.
+\end{proof}
+
+At a source-resolved cut the head--source contributions are still represented separately. At the coarser receiver interface used in the contextual witness, only their aggregate $t_i(H)$ is retained alongside the receiver state $h_i$. These cuts answer different architectural questions.
+
+\subsection{Receiver-local continuation and the FFN}
+
+Let
+\[
+\FFN(x)=W_2\phi(W_1x+b_1)+b_2,
+\qquad
+a(x)=\phi(W_1x+b_1),
+\]
+with coordinatewise $\phi$. If $(e_e)$ is the standard basis of the hidden space and $w_e=W_2e_e$, then:
+
+\begin{proposition}[Marked FFN hidden carrier]\label{prop:ffn-v13}
+\[
+\boxed{\FFN(x)=b_2+\sum_e a_e(x)w_e.}
+\]
+The specified continuation therefore factors through the marked hidden activation carrier $a(x)$.
+\end{proposition}
+
+The hidden activation is an actual represented state used by the FFN. Treating its coordinates as separate experts or mechanisms would require a stronger claim, and a hidden-basis mixing is passive only when its marks and incident maps are transported coherently.
+
+\subsection{A standard PreNorm block}
+
+Let $N_2:V\to V$ be the second receiver-local normalization and define
+\[
+u_i=h_i+t_i(H),
+\qquad
+h_i^+=u_i+\FFN(N_2(u_i)).
+\]
+
+\begin{theorem}[Receiver-process decomposition of a PreNorm block]\label{thm:prenorm-v13}
+For receiver $i$, define
+\[
+Q_i^{\mathrm{att}}(H):=(h_i,t_i(H))
+\]
+corestricted to its realized image, and
+\[
+G_i^{\mathrm{block}}(h,t):=\nu+\FFN(N_2(\nu)),
+\qquad
+\nu=h+t.
+\]
+Then
+\[
+\boxed{B_i^{\mathrm{block}}=G_i^{\mathrm{block}}Q_i^{\mathrm{att}}.}
+\]
+The interface side admits the source-resolved head--source process of \Cref{prop:multihead-v13}; the continuation side admits the FFN hidden-carrier process of \Cref{prop:ffn-v13}.
+\end{theorem}
+
+\begin{proof}
+Evaluating $G_i^{\mathrm{block}}$ at $(h_i,t_i(H))$ gives $u_i+\FFN(N_2(u_i))=h_i^+$.
+\end{proof}
+
+This is the concrete receiver process used earlier: the block presents $(h_i,t_i(H))$ and continues locally through the residual and FFN update. A finer cut can expose $U=(u_i)_i$ as another represented state. The overall block function does not choose which intermediate cut should count as the architecture under comparison.
+
+\subsection{Depth as repeated process composition}
+
+For blocks $B_0,\ldots,B_{L-1}$, let
+\[
+A_\ell:=B_{\ell-1}\circ\cdots\circ B_0,
+\qquad A_0=\Id.
+\]
+A layer-$\ell$ receiver interface $Q_{\ell,j}$ has earlier-input distinction shadow $\mathsf D(Q_{\ell,j}A_\ell)$, family envelope $J_{A_\ell,\mathcal Q_{\ell,j}}$, and effective class set $\mathcal C_{A_\ell}(\mathcal Q_{\ell,j})$. Recutting gives these objects by repeated kernel pullback, while marked dependency neighborhoods compose by predecessor-neighborhood union. PreNorm, PostNorm, parallel branches, recurrence, adaptive depth, and carrier changes can therefore differ in the schedule of represented states on which later receivers are built even when a coarser formula-level description hides those differences.

@@ -1,48 +1,30 @@
-# v1.0 formal and release audit
+# Formal and release audit — v1.6
 
-This audit records the mathematical, semantic, and release invariants checked for the v1.0 public source.
+## Object discipline
 
-## Formal invariants
+1. A receiver branch `B_j` and a represented factorization `B_j=G_jQ_j` are not identified by default.
+2. `Q_j` is the actual represented state supplied at the selected cut; `D(Q_j)=ker Q_j` retains only predecessor distinction structure.
+3. Fixed-branch equality of distinction shadows classifies the stated unmarked surjective factorizations only up to unique carrier re-presentation.
+4. Cut-level marks, active/passive conversions, and admissible mark transport are checked separately from extensional kernel equality.
+5. Recoverability under a carrier conversion is not identified with computational accessibility to a restricted continuation family.
 
-1. The receiver-factored architectural presentation remains the central typed object:
-   `B_j = pi_j chi_Y F = G_j Q_j`.
-2. Every load-bearing result is proved in the main article or technical supplement.
-3. Bijective recoding of one receiver interface preserves its branch and fibers without introducing a general mechanism-equivalence theory.
-4. `P_j`, `Agg_j P_j`, `Q_j`, and `G_j` remain distinct typed objects.
-5. Exact and approximate interface barriers remain prior to the attention specialization.
-6. Operator-valued pair contributions precede scalar relevance and transport.
-7. Attention remains a conditional normal form rather than a universal axiom of receiver-organized computation; its positive raw weights are explicitly linked to the marked baseline and scalar evidence by `w_ri = kappa_ri psi(s_ri)` before the exponential link is derived.
-8. Every attention commitment has a typed neighboring witness in the supplement.
-9. Effective-potential language remains downstream of positive scalar routing.
-10. The actual FFN activation vector is the hidden carrier; the second residual interface is named according to its actual role.
-11. The deterministic variable-successor architecture remains in the main article; stochastic realizations remain in the supplement.
-12. Routing weights alone do not establish intervention-relative mediation.
+## Composition discipline
 
-## Semantic-reference invariants
+6. Downstream comparison after a prefix `A` uses the effective interface `Q_{j,theta}A`.
+7. Effective class sets and family envelopes are contextual reductions, not complete architecture or capability objects.
+8. A receiver-sufficient prefix may collapse a downstream family while retaining parameter-dependent carrier conversions.
+9. The main local/attention contextual witness uses two injective prefixes; its collapse/non-collapse result therefore does not depend on upstream predecessor-information loss.
+10. The lossy broadcast construction is kept separate as a prediction-barrier witness.
 
-The LaTeX configuration uses `aliascnt` so shared numbering does not cause definitions, assumptions, lemmas, propositions, corollaries, examples, or remarks to render as the wrong statement type. CI audits the semantic type recorded in the `.aux` files for each label prefix.
+## Transformer discipline
 
-## Source invariants
+11. Transformer attention and pointwise feed-forward structure are worked represented-process realizations.
+12. The Transformer section is not used to define neural architecture and is not advertised as an independent novelty claim.
+13. Architecture-search consequences are conditional; no generic speedup theorem is claimed.
 
-- The current manuscript source is contained entirely under `paper/`.
-- The bibliography is version-local and does not depend on a legacy directory.
-- Generated LaTeX products are excluded from the source tree and source package.
-- The public source contains no development-only cross-paper dependency.
-- Stable compiled PDFs are stored under `releases/v1.0/`.
-- The source package is extracted and rebuilt during release validation.
+## Release discipline
 
-## Release checks
-
-The release pipeline verifies:
-
-- duplicate labels, missing references, and missing bibliography keys;
-- unresolved LaTeX or `natbib` warnings;
-- semantic `cleveref` types;
-- fresh-build PDF structure, page count, extractable text, embedded fonts, and successful rasterization of every page;
-- identity of the committed v1.0 release artifacts against `releases/v1.0/SHA256SUMS.txt`;
-- independent structure, text-extraction, font-embedding, and every-page rendering checks for the committed release PDFs;
-- local README links;
-- Citation File Format metadata;
-- absence of generated files in the source package.
-
-Fresh builds and immutable release artifacts are validated as separate claims. Exact byte, glyph, or extracted-text equality across TeX environments is not asserted unless the build toolchain is pinned sufficiently to support that claim.
+14. `releases/v1.0/` remains the immutable historical public release.
+15. The maintained manuscript body under `paper/` is byte-identical to the frozen v1.6 scientific source; the arXiv v3 upload uses the same scientific body with upload-facing packaging.
+16. `releases/v1.6/SOURCE_SHA256SUMS.txt` fixes the current manuscript source bytes; frozen submission artifacts are identified by provenance hashes rather than copied from private submission records.
+17. Fresh-build PDFs and frozen submission binaries are different provenance claims; byte equality across TeX environments is not assumed.

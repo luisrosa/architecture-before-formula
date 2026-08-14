@@ -1,0 +1,85 @@
+\subsection{Receiver-sufficient prefixes}\label{subsec:receiver-sufficient-prefix}
+
+The family distinction criterion has a useful architectural specialization. Suppose the whole reachable downstream state is determined by an earlier-cut interface $P$, while every downstream receiver interface retains a local coordinate whose earlier-cut distinction shadow is exactly that of $P$. Then no downstream parameterization can create a finer predecessor distinction relative to the earlier cut.
+
+\begin{definition}[Receiver-sufficient prefix]\label{def:receiver-sufficient-prefix-v13}
+Let
+\[
+P:\Omega\twoheadrightarrow U,
+\qquad
+A:\Omega\to X,
+\qquad
+L_j:X\to V_j.
+\]
+We call $P$ receiver-sufficient for $A$ at receiver $j$ when:
+\begin{enumerate}[label=(\roman*)]
+\item the whole reachable downstream state factors through $P$, so there exists $\widetilde A:U\to X$ with
+\[
+A=\widetilde A P;
+\]
+\item the recut local receiver state has exactly the $P$ distinction shadow,
+\[
+L_jA\equiv_DP.
+\]
+\end{enumerate}
+\end{definition}
+
+Consider any parameterized downstream receiver family whose actual presented interfaces retain this local coordinate,
+\[
+Q_{j,\theta}(x)=\bigl(L_j(x),E_{j,\theta}(x)\bigr)
+\]
+on their realized images.
+
+\begin{proposition}[Receiver-sufficient distinction collapse]\label{prop:receiver-sufficient-collapse-v13}
+If $P$ is receiver-sufficient for $A$ at receiver $j$, then for every parameter state $\theta$,
+\[
+\boxed{Q_{j,\theta}A\equiv_DP.}
+\]
+Consequently,
+\[
+\boxed{
+\mathcal C_A(\mathcal Q_j)=\{[P]_D\},
+\qquad
+J_{A,\mathcal Q_j}\equiv_DP.
+}
+\]
+Moreover, for each $\theta$ there is a unique bijection on realized images
+\[
+T_\theta:U\xrightarrow{\cong}\im(Q_{j,\theta}A)
+\]
+such that
+\[
+\boxed{Q_{j,\theta}A=T_\theta P.}
+\]
+\end{proposition}
+
+\begin{proof}
+Because $A=\widetilde A P$, every composite $Q_{j,\theta}A$ factors through $P$, so $Q_{j,\theta}A\preceq_DP$. Conversely, equality under $Q_{j,\theta}A$ implies equality of its retained local coordinate $L_jA$. Since $L_jA\equiv_DP$, equality under the receiver interface implies equality under $P$, so $P\preceq_DQ_{j,\theta}A$. The kernels are equal. The class-set and envelope conclusions follow, and the unique $T_\theta$ follows from \Cref{thm:unique-conversion-v13}.
+\end{proof}
+
+\begin{corollary}[Injective receiver-sufficient collapse]\label{cor:injective-receiver-sufficient-v14}
+Under the hypotheses of \Cref{prop:receiver-sufficient-collapse-v13}, suppose additionally that $P$ is injective. Then:
+\begin{enumerate}[label=(\roman*)]
+\item $A$ is injective;
+\item every effective receiver interface $Q_{j,\theta}A$ is injective;
+\item every effective distinction shadow is the diagonal relation
+\[
+\Delta_\Omega:=\{(\omega,\omega):\omega\in\Omega\};
+\]
+\item any distinction-class collapse supplied by the proposition cannot be attributed to loss of predecessor distinctions by the prefix $A$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+Since $L_jA\equiv_DP$ and $P$ is injective,
+\[
+\ker(L_jA)=\ker P=\Delta_\Omega,
+\]
+so $L_jA$ is injective. If $A(\omega)=A(\omega')$, then $L_jA(\omega)=L_jA(\omega')$, hence $\omega=\omega'$. Therefore $A$ is injective. The receiver-sufficient collapse proposition gives
+\[
+\ker(Q_{j,\theta}A)=\ker P=\Delta_\Omega
+\]
+for every $\theta$, proving the remaining claims.
+\end{proof}
+
+The distinction between the two results matters. Receiver sufficiency alone can arise because an upstream prefix discarded predecessor information. The injective corollary isolates a different phenomenon: the prefix can preserve every predecessor distinction while changing which downstream schema distinctions remain visible at the chosen receiver-access grain. Section~\ref{subsec:attention-context-witness} gives an exact attention instance.

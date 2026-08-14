@@ -1,62 +1,26 @@
-# v1.0 validation record
+# Validation record — public v1.6
 
-**Artifact:** *Architecture Before the Formula: Receiver-Wise Factorization and the Reconstruction of Transformer Blocks*  
-**Version:** 1.0  
-**Final pre-publication validation date:** 2026-08-09
+**Artifact:** *Architecture Before the Formula: Individuating Neural Architecture Beyond the Composite Map*  
+**Repository version:** 1.6  
+**Scientific freeze date:** 2026-08-12
 
-## Status
+## Authoritative public state
 
-The v1.0 repository is the maintained public source for the receiver-factorization manuscript. During the final pre-publication audit, the attention normal-form presentation was tightened so that the compositional positive-link assumption explicitly states the raw-weight relation used by its proof, the conventional additive-logit-bias convention was made explicit, the singleton-row anchoring proof was made fully literal, and two elementary omitted proof steps were supplied or clarified. The variable-successor extension was also written with an explicit restriction to each selected sector domain. These edits do not change the receiver-factorization primitive or the resulting Transformer normal form; they make the stated premises, typing, and proof dependencies explicit.
+The maintained `paper/` manuscript body is byte-identical to the frozen v1.6 scientific source. `releases/v1.6/SOURCE_SHA256SUMS.txt` fixes those public source bytes.
 
-Repository-level provenance is carried by the immutable Git commit or tag being inspected, its associated GitHub Actions run, and the release hashes in `releases/v1.0/SHA256SUMS.txt`. Those identifiers are intentionally not duplicated as a commit hash inside this source file, which would make the recorded commit self-referential.
+Submission-provenance hashes are retained as identity records without publishing private submission packages:
 
-## Release evidence
+- frozen 34-page JMLR-submission manuscript PDF: `4fddb69c4ce94d4b45923724fcf0f0b61a01b4c5b76c2e5341c450f13e7e212e`
+- validated clean arXiv v3 source ZIP: `76f9eebeda84e4c9e45bce66d4ab6178708ebae27ae2f8a10e35e3590e398b6f`
 
-| Item | Value |
-|---|---|
-| Main article | 30 pages; exact release SHA-256 recorded in `releases/v1.0/SHA256SUMS.txt` |
-| Technical supplement | 14 pages; exact release SHA-256 recorded in `releases/v1.0/SHA256SUMS.txt` |
-| Build environment | GitHub Actions `xu-cheng/latex-action@v3`; exact runner/toolchain provenance is carried by the associated workflow run |
-| Source layout | current source contained entirely in `paper/` |
-| Bibliography | local `paper/references.bib` and `paper/references_additions.bib` |
-| Font embedding | all fonts embedded in both PDFs |
-| Rasterization | every page of both generated and committed release PDFs renders successfully |
-| Source package | generated deterministically from the maintained repository tree and audited for generated/binary build products; exact release SHA-256 recorded in `releases/v1.0/SHA256SUMS.txt` |
+The public archival paper is arXiv:2601.11618v3. A fresh repository build is validated structurally and uploaded by CI; byte equality across TeX/PDF environments is not asserted.
 
-Exact artifact hashes live only in the release manifest and release directory documentation. Keeping build-specific hashes out of this source-packaged validation record avoids coupling the source archive to non-byte-reproducible PDF metadata from a moving TeX environment.
+## Scientific invariants
 
-## Formal invariants
+Validation is constrained by `CLAIMS.md`: the represented receiver process is not contracted when architecture identity is under analysis; `D(Q)=ker Q` is an extensional shadow rather than a complete architecture object; fixed-branch kernel equality classifies only the declared unmarked surjective factorizations; marked equivalence and restricted continuation accessibility are finer questions; composition acts on `Q_{j,theta}A`; the main local/attention witness uses injective prefixes; the lossy broadcast witness is separate; Transformer material is an instance; and no generic architecture-search speedup is claimed.
 
-1. The receiver-factored architectural presentation remains the central typed object.
-2. Every load-bearing result is proved in the main article or public supplement.
-3. Bijective interface recoding is handled locally without importing a global mechanism-equivalence theory.
-4. `P_j`, `Agg_j P_j`, `Q_j`, and `G_j` remain distinct.
-5. Operator-valued pair contributions precede scalar relevance and transport.
-6. The attention normal form explicitly links baseline and scalar evidence to raw weights before deriving the exponential row.
-7. Attention remains a conditional normal form, with a typed neighboring witness for each commitment.
-8. Effective-potential language remains downstream of positive scalar routing.
-9. The actual FFN activation vector remains the hidden carrier.
-10. The deterministic variable-successor architecture remains in the main article; stochastic realizations remain in the supplement.
-11. Routing weights alone do not establish intervention-relative mediation.
+## Repository checks
 
-## Repository checks completed
+CI validates Citation File Format metadata, the v1.6 source surface and SHA-256 manifest, compilation with the official JMLR style retrieved from a pinned upstream commit, absence of undefined citations/references, 34-page PDF structure, extractable text, embedded fonts, every-page rasterization, integrity of the historical v1.0 release manifest, and deterministic public source packaging. Layout warnings and the already-submitted duplicate-label warning are surfaced by the TeX log but are not promoted to false manuscript failures.
 
-- no duplicate labels;
-- no missing internal references;
-- no missing bibliography keys;
-- no unresolved citations or `natbib` warnings;
-- no multiply defined labels or overfull boxes;
-- correct semantic statement types under shared numbering;
-- no stale pre-release paths or labels;
-- no development-only cross-paper dependency in the public snapshot;
-- no generated LaTeX products in `paper/`;
-- stable compiled PDFs linked directly from the root README;
-- deterministic clean-source packaging;
-- source-package extraction and independent rebuild;
-- PDF structure, text extraction, embedded fonts, and every-page rendering.
-
-## Continuous validation
-
-`.github/workflows/validate-paper.yml` validates the exact repository tree on every pull request and push to `main`. The workflow rebuilds the paper and supplement from the current source under its configured TeX environment, audits LaTeX diagnostics and semantic references, checks PDF structure with `qpdf`, verifies embedded fonts, renders every generated page, rebuilds the clean source package, and uploads the validated artifacts.
-
-The committed files in `releases/v1.0/` are validated as immutable release artifacts. Their identity is checked against `releases/v1.0/SHA256SUMS.txt`, and the committed PDFs are independently checked for structure, text extraction, embedded fonts, and every-page rendering. Exact output equality across rebuilds is not asserted unless the build toolchain itself is pinned sufficiently to support that claim. Exact remote provenance is read from the commit or release tag together with its associated Actions run.
+Fresh TeX output is validated as a build product. The frozen submission PDF is tracked by its provenance hash; exact byte equality between a fresh build and the frozen submission PDF is not asserted because TeX/PDF metadata can vary across toolchains.
