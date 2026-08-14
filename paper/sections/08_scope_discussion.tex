@@ -1,0 +1,44 @@
+\section{What the comparison tells us about architecture}\label{sec:scope-discussion}
+
+The analysis separates objects that are often collapsed under the word \emph{architecture}. The composite map records what a branch eventually computes. The distinction shadow records which predecessor differences survive to an interface. The represented receiver process keeps the state in which those distinctions are made available and the continuation that acts on it. Cut-level marks record which parts of that presentation count as separate architectural roles.
+
+For fixed-branch surjective factorizations,
+\[
+Q\equiv_DQ'
+\quad\Longleftrightarrow\quad
+(Q,G)\cong_{\mathrm{fac}}(Q',G'),
+\]
+so equal kernels and unmarked factorization identity are the same claim at that grain. Marked identity is finer: the unique equal-shadow conversion must also preserve the roles admitted by the comparison. More generally,
+\[
+\boxed{
+\begin{array}{c}
+\text{same distinction shadow / same unmarked factorization class}\\
+\not\Rightarrow\\
+\text{same marked receiver process up to admitted passive re-presentation}\\
+\not\Rightarrow\\
+\text{same complete architecture}\\
+\not\Rightarrow\\
+\text{same implementation mechanism}.
+\end{array}}
+\]
+The first line is an equivalence only under the hypotheses of \Cref{thm:factorization-classification-v14}; the later lines are progressively stronger identity claims.
+
+The active/passive coordinate issue sits at the first gap. If $Q'=TQ$ with $T$ bijective, either presentation can recover the other. Invertibility settles recoverability. It does not settle architectural identity. A passive re-presentation moves the incident maps and declared marks with the chart; an active $T$ is an arrow the represented process computes. Algebraic invertibility cannot erase that operation.
+
+Restricted continuation exposes the same distinction from another side. The deterministic barrier concerns information lost at the interface. Continuation transport and the squared-loss decomposition show a separate limitation: information may survive but require a conversion or continuation outside the allowed family. Equal information content therefore does not exhaust represented computational organization.
+
+\subsection{Architecture families after a prefix}
+
+For a modular family, $\mathcal C_{A_c}(\mathcal Q_{d,j})$ records the effective predecessor partitions realized by a downstream choice after the upstream map $A_c$. Equal class sets make two choices redundant at this grain in that context. The injective local/attention witness shows that this redundancy can change with $c$ even when the prefixes preserve every predecessor distinction.
+
+The family envelope $J_{A_c,\mathcal Q_{d,j}}$ asks a different question: which predecessor distinctions are available somewhere across the parameter family? When
+\[
+J_{A_c,\mathcal Q_{d,j}}\preceq_D P,
+\]
+every effective interface factors through $P$, giving the deterministic family barrier and, under the measurable factorization hypothesis of \Cref{cor:uniform-bayes-v13}, the Bayes-risk floor. Class sets describe contextual architectural redundancy; the envelope describes a family-wide information limit.
+
+Marked locality adds the dependency side of the same story. Kernel pullback tracks which predecessor states remain distinguishable; neighborhood composition tracks which earlier coordinates can affect a receiver. ``Local'' and ``global'' are therefore properties of a represented cut and its dependency marks, not timeless labels attached to a formula.
+
+\subsection{What remains open}
+
+These exact objects settle a structural question before an algorithmic one. They do not show that quotient-aware search is faster or easier to optimize, and they stop before complete causal or implementation-mechanism identity. For large trained networks, estimating approximate or distribution-relative distinction classes is a separate statistical problem. Cost-sensitive continuation transport, stochastic interfaces, carrier-changing architectures, and practical estimators are natural next steps.

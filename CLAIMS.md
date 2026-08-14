@@ -1,29 +1,29 @@
-# Claim ledger - v1.0
+# Architecture Before the Formula — v1.6 claim ledger
 
-This ledger maps the manuscript's principal claims to their formal status and support in `paper/`.
+This file records the semantic constraints for the current public manuscript. The theorem statements in `paper/` are authoritative.
 
-| Claim | Status | Formal support |
-|---|---|---|
-| Architecture is a marked receiver-wise factorization of an already represented update. | Definition and organizing thesis | Definition `def:receiver-factored-architecture`; Eq. `eq:receiver-factorization` |
-| Receiver labels alone do not impose restricted locality when every branch receives the full represented state. | Proposition | Proposition `prop:full-access-collapse` |
-| The canonical answer quotient is the coarsest exact branch-sufficient quotient but does not identify the marked architecture. | Proposition and interpretive consequence | Proposition `prop:canonical-branch-quotient` |
-| Bijective recodings of one receiver interface preserve its branch and its fibers. | Proposition and re-presentation convention | Proposition `prop:interface-representation` |
-| Receiver interfaces form a refinement preorder, and coarser interfaces cannot recover distinctions removed by finer-to-coarser factorization. | Definition and proposition | Definition `def:interface-refinement`; Proposition `prop:refinement-preorder` |
-| Global conjugacy can preserve the total update while destroying coordinate-local receiver interpretation. | Proposition | Proposition `prop:locality-conjugacy` |
-| Retained local state, source-resolved contributions, aggregate exposure, complete receiver interface, and local continuation are distinct typed objects. | Definitions and central refinement diagram | Definitions `def:local-exposure-refinement`, `def:source-resolved-refinement`; Fig. `fig:interface-refinement` |
-| Aggregation can erase source-resolved distinctions that remain relevant to a target, producing exact and approximate realization barriers. | Example, theorem, and lower bound | Example `ex:aggregation-collision`; Theorems `thm:aggregation-fiber`, `thm:deterministic-lower-bound`; Corollary `cor:exact-recoverability` |
-| Unresolved variation at the interface and accessibility limits of a restricted local continuation are distinct error terms. | Exact squared-loss decomposition | Theorem `thm:squared-decomposition` |
-| Provenance source types are marked, but actual state, parameter, instance, or schema dependence is derived by admissible counterfactual variation. | Definition and proposition | Definition `def:essential-dependence`; Proposition `prop:provenance-underdetermination` |
-| Additive operator-valued pair contributions define a state-indexed operator family. Scalar relevance and transport form an additional marked factorization, not primitive data. | Definition and proposition | Definition `def:additive-routed-realization`; Proposition `prop:routed-operator-field` |
-| Masked query-key softmax attention follows from pairwise scalar evidence, positive compositional linking, row anchoring, source-local payloads, additive aggregation, and shared finite separation rank. | Conditional normal-form theorem | Assumptions `ass:pairwise-scalar`–`ass:values-aggregation`; Definition `def:shared-separation-rank`; Proposition `prop:separable-bilinear`; Theorem `thm:attention-normal-form` |
-| The attention commitments perform distinct architectural work and can be removed into typed neighboring regimes. | Constructive qualification ledger | Supplement `supp:commitment-witnesses` |
-| Query-key coordinates are derived from shared finite separation rank rather than assumed as primitive. | Proposition | Proposition `prop:separable-bilinear` |
-| Effective-potential and receiver free-energy representations are exact only in the positive scalar routing specialization. | Definition and theorem | Definition `def:effective-potential`; Theorem `thm:receiver-free-energy` |
-| Exact source quotienting preserves the pushed-forward allocation and induces a log-sum-exp effective potential. | Theorem | Theorem `thm:potential-of-mean-force` |
-| The FFN hidden-coordinate carrier is justified by the marked intermediate activation vector of the specified two-layer continuation, not by arbitrary algebraic refactorization. | Definition and proposition | Definition `def:local-continuation-refinement`; Proposition `prop:ffn-hidden-carrier` |
-| A canonical PreNorm block admits a coarse factorization in which attention constructs the receiver interface and the FFN belongs to local continuation. | Theorem | Theorem `thm:block-receiver-factorization` |
-| The familiar two-sublayer routed description is a finer marked presentation, while the actual FFN hidden carrier remains internal to the local branch. | Corollary and notation clarification | Corollary `cor:fine-two-stage-block` |
-| Variable-cardinality successor architecture distinguishes selection of a receiver sector from successor content within that sector. | Definition and proposition | Definition `def:configurational-endogenization`; Proposition `prop:finite-slot-encoding`; Section `sec:variable-population` |
-| Positive stochastic variable-successor laws admit effective sector potentials and a KL free-energy identity. | Supplementary proposition and theorem | Proposition `prop:supp-effective-sector-potential`; Theorem `thm:supp-joint-successor-free-energy` |
-| Routing weights alone do not establish intervention-relative mediation. | Proposition and scope boundary | Proposition `prop:weights-not-mediation`; Section `sec:mechanism-boundary` |
-| Implementation warrant, intervention licensing, identity across complete implementations, and tracking require additional evidence not supplied by an exact architectural factorization. | Explicit nonclaim | Section `sec:mechanism-boundary` |
+- `B_j=G_jQ_j` is an actual represented receiver factorization; `Q_j(x)` is the state presented at the selected cut.
+- `D(Q)=ker Q` is the distinction shadow of that interface, not the interface itself.
+- `Q equiv_D Q'` means equality of kernels only.
+- For two surjective factorizations of one fixed branch, equal distinction shadows are equivalent to unmarked factorization isomorphism through one unique carrier bijection.
+- A cut-level mark signature is a finite declared family of maps naming roles treated as constitutive by the comparison.
+- Marked receiver-process equivalence is finer than unmarked factorization/distinction equivalence: the unique carrier conversion must also transport the declared marks under an admissible passive transport.
+- The admissible mark-transport system is fixed before candidate carrier conversions are tested and is closed under identity, inverse, and composition.
+- An active represented conversion is an arrow of the selected process; a passive re-presentation transports one represented node, its incident maps, and its marks.
+- Equal distinction shadows establish recoverability up to unique re-presentation; they do not make the recovering conversion already computed or available to a restricted continuation.
+- Continuation behavior is invariant under a representation conversion only when the continuation family transports with that conversion.
+- Marked locality is factorization through declared coordinate projections; affine locality on full direct-sum vector states is block support.
+- Precomposition pulls distinction shadows back; joint presentation intersects kernels.
+- `C_A(Q)` records the effective parameter-interface distinction classes after an upstream map.
+- `J_{A,Q}` is the family distinction envelope induced by the intersection of effective kernels. It is not a complete capability, presentation, or architecture object.
+- Equality of effective class sets implies equality of family envelopes; the converse fails.
+- Family-envelope factorization yields parameter-uniform deterministic barriers. The Bayes-risk floor additionally requires measurable factor maps through the earlier-cut representation.
+- Approximate Lipschitz bounds depend on metric presentation as well as distinction structure.
+- A receiver-sufficient prefix collapses a downstream parameter family to one earlier-cut distinction class while permitting parameter-dependent carrier conversions.
+- If the receiver-sufficient representation is injective, the prefix and every effective receiver interface are injective; the resulting contextual collapse cannot be attributed to upstream predecessor-information loss.
+- In the exact local/attention witness, `A_enc(u,v)=(2u+v,0)` and the identity prefix are both injective. Local and attention have the same effective distinction-class set after the former and different sets after the latter.
+- The lossy broadcast witness is separate and supplies the exact `1/2` deterministic and `1/4` Bayes-MSE barriers.
+- Distinction equivalence and marked receiver-process equivalence are weaker than complete architecture identity, implementation identity, and causal-mechanism identity.
+- The Transformer section is a worked realization of the represented-process analysis, not the defining object or a separate novelty claim.
+
+If README prose or repository metadata conflicts with the manuscript theorem statements, the manuscript controls.

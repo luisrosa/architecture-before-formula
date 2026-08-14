@@ -1,0 +1,222 @@
+\section{When downstream choices stop being independent}\label{sec:contextual-search}
+
+Modular search spaces usually treat downstream choices such as ``local'' and ``attention'' as independent coordinates of the architecture. At the receiver-distinction grain, that independence can fail after composition. A downstream schema is not compared on all states it could in principle receive; it is compared on the represented states supplied by the chosen prefix. The same two schemas can therefore have different effective distinction-class sets in one upstream context and the same class set in another.
+
+The previous section gave the objects needed to state this precisely. For a downstream family $\mathcal Q_{d,j}$ and an upstream map $A_c$, the set $\mathcal C_{A_c}(\mathcal Q_{d,j})$ records the predecessor-state partitions realized across parameter states after the prefix. We now use those class sets to define a context-dependent quotient of downstream architecture choices.
+
+\subsection{Contextual distinction-class equivalence}
+
+Let $C$ be a set of upstream architecture choices and $D$ a set of downstream schema choices. For $c\in C$, let
+\[
+A_c:\Omega_c\to X
+\]
+be the represented upstream map. Fix a receiver-alignment scheme across the downstream choices being compared. For each aligned receiver $j$ and downstream choice $d$, let
+\[
+\mathcal Q_{d,j}=\{Q_{d,j,\theta}\}_{\theta\in\Theta_d}
+\]
+be its parameterized presented-interface family.
+
+\begin{definition}[Contextual distinction-class equivalence]\label{def:contextual-class-equivalence-v13}
+For fixed context $c$, write
+\[
+d\sim_c^D d'
+\]
+when, for every aligned receiver $j$,
+\[
+\boxed{
+\mathcal C_{A_c}(\mathcal Q_{d,j})
+=
+\mathcal C_{A_c}(\mathcal Q_{d',j}).
+}
+\]
+\end{definition}
+
+Equality of class sets is an equivalence relation, so $\sim_c^D$ is an equivalence relation on the downstream schemas covered by the alignment. It compares which predecessor-state partitions occur somewhere in each parameter family after recutting. It forgets parameter labels, multiplicities, presented coordinates, construction, continuation, sharing, and schedule.
+
+A coarser comparison is equality of family distinction envelopes,
+\[
+d\sim_c^{\mathrm{env}}d'
+\quad\Longleftrightarrow\quad
+J_{A_c,\mathcal Q_{d,j}}\equiv_DJ_{A_c,\mathcal Q_{d',j}}
+\quad\text{for every aligned }j.
+\]
+By \Cref{prop:classes-vs-envelope-v13}, $d\sim_c^Dd'$ implies $d\sim_c^{\mathrm{env}}d'$, but the converse fails in general.
+
+\begin{corollary}[No context-independent downstream distinction quotient]\label{cor:no-fixed-quotient-v13}
+If there exist $c,c'\in C$ and $d,d'\in D$ such that
+\[
+d\sim_c^D d'
+\qquad\text{but}\qquad
+d\not\sim_{c'}^D d',
+\]
+then there is no single equivalence relation $\approx$ on $D$ whose classes agree with those of $\sim_c^D$ for every upstream context $c$.
+\end{corollary}
+
+\begin{proof}
+If such $\approx$ existed, the first relation would require $d\approx d'$, while the second would require $d\not\approx d'$.
+\end{proof}
+
+Exact redundancy at this grain is therefore represented contextwise by
+\[
+\boxed{
+\bigsqcup_{c\in C}\{c\}\times(D/{\sim_c^D}),
+}
+\]
+not in general by a product $C\times(D/{\approx})$ with one prefix-independent downstream quotient.
+
+\subsection{Exact self-attention witness with injective prefixes}\label{subsec:attention-context-witness}
+
+The previous corollary is abstract. The next construction asks whether the phenomenon already appears between two familiar downstream schemas, and whether it can survive after removing the obvious explanation that the upstream prefix simply destroyed information.
+
+Let
+\[
+\Omega=\{0,1\}^2,
+\qquad
+X=\R^2,
+\qquad
+H=(h_1,h_2),
+\]
+and define
+\[
+c(u,v):=2u+v.
+\]
+On $\Omega$, $c$ takes the four distinct values $0,1,2,3$. Compare the two injective prefixes
+\[
+\boxed{
+A_{\mathrm{enc}}(u,v)=(c(u,v),0),
+\qquad
+A_{\mathrm{id}}(u,v)=(u,v).
+}
+\]
+Thus
+\[
+\ker A_{\mathrm{enc}}=\ker A_{\mathrm{id}}=\Delta_\Omega.
+\]
+
+For receiver $1$, the local schema has
+\[
+Q_{\mathrm{loc}}(h_1,h_2)=h_1.
+\]
+The attention schema is a standard scalar, one-head, full-mask self-attention family with identity normalization at this example's cut and coarse residual receiver interface
+\[
+Q^{\mathrm{att}}_{\theta}(H):=\bigl(h_1,t_{1,\theta}(H)\bigr).
+\]
+The family contains a zero-value state $\theta_0$ with $t_{1,\theta_0}(H)=0$ and a uniform-average state $\theta_{\mathrm{avg}}$ with
+\[
+t_{1,\theta_{\mathrm{avg}}}(H)=\frac{h_1+h_2}{2}.
+\]
+The latter is realized by scalar $W_Q=W_K=0$, $W_V=1$, identity output map, zero bias, and both sources admissible.
+
+\begin{theorem}[Injective-prefix collapse of local and attention distinction classes]\label{thm:injective-attention-collapse-v14}
+Let $P:=c:\Omega\to\{0,1,2,3\}$. Under $A_{\mathrm{enc}}$,
+\[
+Q_{\mathrm{loc}}A_{\mathrm{enc}}\equiv_DP
+\]
+and every attention parameter state satisfies
+\[
+Q^{\mathrm{att}}_{\theta}A_{\mathrm{enc}}\equiv_DP.
+\]
+Since $P$ is injective,
+\[
+\boxed{
+\mathcal C_{A_{\mathrm{enc}}}(\mathcal Q_{\mathrm{att}})
+=
+\{[P]_D\}
+=
+\mathcal C_{A_{\mathrm{enc}}}(\mathcal Q_{\mathrm{loc}}),
+}
+\]
+and the collapse occurs without any predecessor-state identification by the prefix.
+\end{theorem}
+
+\begin{proof}
+The prefix factors as
+\[
+A_{\mathrm{enc}}=\widetilde A P,
+\qquad
+\widetilde A(s)=(s,0),
+\]
+and the retained local receiver coordinate is $L_1A_{\mathrm{enc}}=P$. Thus $P$ is receiver-sufficient for $A_{\mathrm{enc}}$ at receiver $1$. Every attention interface retains $h_1$, so \Cref{prop:receiver-sufficient-collapse-v13} gives $Q^{\mathrm{att}}_\theta A_{\mathrm{enc}}\equiv_DP$ for all $\theta$; the same is immediate for the local interface. Injectivity then follows from \Cref{cor:injective-receiver-sufficient-v14}.
+\end{proof}
+
+For each attention parameter state, \Cref{thm:unique-conversion-v13} supplies a unique realized-image bijection $T_\theta$ satisfying
+\[
+Q^{\mathrm{att}}_\theta A_{\mathrm{enc}}=T_\theta P.
+\]
+This equality identifies the distinction class. Marked receiver-process identity asks the finer question of whether the corresponding conversions preserve the declared roles and continuation structure.
+
+\begin{proposition}[Distinction separation under the identity prefix]\label{prop:identity-attention-recovery-v13}
+Under $A_{\mathrm{id}}$,
+\[
+Q_{\theta_0}^{\mathrm{att}}A_{\mathrm{id}}(u,v)=(u,0)
+\]
+has the same distinction shadow as $Q_{\mathrm{loc}}A_{\mathrm{id}}(u,v)=u$, while
+\[
+Q_{\theta_{\mathrm{avg}}}^{\mathrm{att}}A_{\mathrm{id}}(u,v)
+=\left(u,\frac{u+v}{2}\right)
+\]
+is injective on $\Omega$. Therefore
+\[
+\boxed{
+\mathrm{loc}\sim_{A_{\mathrm{enc}}}^D\mathrm{att}
+\qquad\text{but}\qquad
+\mathrm{loc}\not\sim_{A_{\mathrm{id}}}^D\mathrm{att},
+}
+\]
+although both prefixes are injective.
+\end{proposition}
+
+\begin{proof}
+The zero-value state is immediate. For $\theta_{\mathrm{avg}}$, the first output coordinate gives $u$ and the second gives $v=2t-u$, so the interface is injective. The local schema under identity has only the noninjective class determined by $u$.
+\end{proof}
+
+\begin{corollary}[Context dependence without upstream distinction loss]\label{cor:injective-no-fixed-quotient-v14}
+The no-fixed-quotient conclusion of \Cref{cor:no-fixed-quotient-v13} already follows on the pair of injective contexts $A_{\mathrm{enc}}$ and $A_{\mathrm{id}}$. Prefix-dependent downstream distinction redundancy is therefore not reducible to the data-processing fact that a noninjective prefix can erase predecessor information.
+\end{corollary}
+
+The conclusion is architectural rather than merely informational. The same pair of downstream schemas is redundant at the chosen receiver-distinction grain after $A_{\mathrm{enc}}$ and distinct after $A_{\mathrm{id}}$, even though both prefixes preserve every predecessor distinction. A fixed downstream module label does not, by itself, specify a context-independent architectural degree of freedom.
+
+\subsection{A lossy broadcast instance and exact task barriers}
+
+The injective witness establishes context-dependent architectural redundancy without information loss. A separate lossy prefix shows when the same receiver calculus becomes a task limitation. Define
+\[
+A_{\mathrm b}(u,v)=(u,u),
+\qquad
+P_{\mathrm b}(u,v)=u.
+\]
+
+\begin{proposition}[Broadcast distinction collapse and task barrier]\label{prop:broadcast-barrier-v14}
+For every attention parameter state,
+\[
+Q^{\mathrm{att}}_\theta A_{\mathrm b}\equiv_DP_{\mathrm b},
+\]
+so
+\[
+\mathcal C_{A_{\mathrm b}}(\mathcal Q_{\mathrm{att}})=\{[P_{\mathrm b}]_D\},
+\qquad
+J_{A_{\mathrm b},\mathcal Q_{\mathrm{att}}}\equiv_DP_{\mathrm b}.
+\]
+For target $f(u,v)=v$ with absolute error, every continuation after every such attention interface satisfies
+\[
+\boxed{
+\sup_{(u,v)\in\Omega}|v-\widehat v_\theta(u,v)|\ge\frac12.
+}
+\]
+If $(u,v)$ is uniform on $\Omega$ and $Y=v$, every such predictor also satisfies
+\[
+\boxed{
+\E|Y-\widehat Y_\theta|^2\ge\frac14.
+}
+\]
+Both constants are sharp at the information level.
+\end{proposition}
+
+\begin{proof}
+The reachable state $A_{\mathrm b}(u,v)=(u,u)$ factors through $P_{\mathrm b}$ and the retained local coordinate is exactly $P_{\mathrm b}$, so \Cref{prop:receiver-sufficient-collapse-v13} gives the distinction collapse. Inside each $P_{\mathrm b}$-fiber, $v$ takes both values $0$ and $1$, giving the $1/2$ deterministic lower bound. Under the uniform distribution, $\E[Y\mid u]=1/2$ and the conditional variance is $1/4$, giving the squared-loss floor.
+\end{proof}
+
+Under the identity prefix, the uniform-average attention interface recovers $v$ exactly through $G(h,t)=2t-h$. The injective example establishes the architecture-space consequence; the broadcast example supplies the prediction barrier.
+
+\subsection{Implication for modular search spaces}
+
+A modular search space containing downstream choices ``local'' and ``attention'' cannot identify those choices by one prefix-independent distinction-class relation: one injective context merges them at this grain while another separates them. Downstream module labels can therefore overstate the number of independent architectural choices available after an upstream representation has been fixed. The structural claim comes first: the nominal product decomposition of the search space need not survive composition. Whether exploiting that quotient improves search is a separate algorithmic question.

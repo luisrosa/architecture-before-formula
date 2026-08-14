@@ -1,25 +1,20 @@
 # Changelog
 
-## v1.0 - 2026-08-09
+## v1.6 — 2026-08-14
 
-First maintained public release of the receiver-factorization formulation.
+Current manuscript and first public release of the reconstructed architecture-individuation formulation.
 
-- Defines architecture as a marked receiver-wise factorization of an already represented update.
-- Separates receiver interface, source-resolved computation, retained aggregation, and receiver-local continuation.
-- Derives masked query-key softmax attention under an explicit package of architectural commitments, including an explicit baseline/evidence-to-raw-weight link.
-- Exhibits typed neighboring constructions showing the distinct work performed by those commitments.
-- Reconstructs the FFN as a marked refinement of receiver-local continuation.
-- Reconstructs the canonical PreNorm Transformer block at coarse and fine architectural grains.
-- Includes a deterministic variable-successor extension and a separate stochastic supplement.
-- States the additional evidence obligations required for stronger implementation-facing claims.
-- Includes stable compiled PDFs, a clean source package, semantic theorem-reference audits, and reproducible release checks.
+- Reorients the paper around the prior identity question: what should count as the same neural architecture?
+- Selects the represented receiver process `B_j = G_j Q_j` as the cut-level object and the distinction shadow `D(Q)=ker Q` as its extensional reduction.
+- Establishes the fixed-branch classification theorem for surjective unmarked factorizations up to unique carrier re-presentation.
+- Separates preserved predecessor distinctions, marked receiver organization, recoverability, and restricted continuation accessibility.
+- Develops composition through effective interfaces `Q_{j,theta} A`, effective class sets, family distinction envelopes, and receiver-sufficient prefixes.
+- Makes the injective two-token local/attention witness the main architecture-space consequence: contextual redundancy can change under an injective prefix and therefore need not arise from upstream information loss.
+- Keeps the lossy broadcast construction separate as the exact deterministic/Bayes prediction-barrier witness.
+- Repositions the Transformer material as a worked realization of the represented-process analysis rather than the defining object or an independent novelty claim.
+- Removes the incorrect non-completability theorem and dependent claims from the earlier research lineage.
+- Aligns public source, claim ledger, citation metadata, and provenance with arXiv:2601.11618v3 and the manuscript submitted to JMLR.
 
-## Private development milestones
+## v1.0 — 2026-08-09
 
-The retained development sequence begins at v0.9.0:
-
-- v0.10.0 - receiver-factorization reorganization
-- v0.9.1 - effective-potential and variable-successor extension
-- v0.9.0 - receiver-interface and state-constructed-routing formulation
-
-These developmental versions are not distributed in this public source repository.
+First maintained public release of the earlier receiver-factorization formulation. The immutable v1.0 artifacts remain under `releases/v1.0/` and tag `v1.0`; that release is historical and should not be read as the current statement of the project.

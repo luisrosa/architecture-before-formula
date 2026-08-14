@@ -6,32 +6,38 @@ authors:
   - family-names: "Rosario Freytes"
     given-names: "Luis F."
     affiliation: "University of Michigan, Ann Arbor"
-version: "1.0"
-date-released: "2026-08-09"
+version: "1.6"
+date-released: "2026-08-14"
 license: CC-BY-4.0
 repository-code: "https://github.com/luisrosa/architecture-before-formula"
+url: "https://arxiv.org/abs/2601.11618"
+identifiers:
+  - type: doi
+    value: "10.48550/arXiv.2601.11618"
+    description: "arXiv DOI"
+  - type: other
+    value: "arXiv:2601.11618"
+    description: "arXiv identifier"
 abstract: >-
-  Source, compiled artifacts, and validation materials for a philosophical and
-  mathematical reconstruction of neural architecture as a marked receiver-wise
-  factorization of a represented update.
+  Source and validation materials for a study of neural architecture individuation
+  at represented intermediate states, including distinction shadows, marked
+  receiver processes, restricted continuation access, and context-dependent
+  downstream identity under composition.
 keywords:
-  - Transformers
-  - attention
   - neural architecture
-  - receiver interface
-  - receiver-wise factorization
-  - information flow
-  - aggregation
-  - effective potential
-  - feedforward networks
-  - philosophy of machine learning
+  - architecture individuation
+  - receiver access
+  - composition
+  - architecture search
+  - Transformers
+  - representation
 preferred-citation:
   type: article
-  title: "Architecture Before the Formula: Receiver-Wise Factorization and the Reconstruction of Transformer Blocks"
+  title: "Architecture Before the Formula: Individuating Neural Architecture Beyond the Composite Map"
   authors:
     - family-names: "Rosario Freytes"
       given-names: "Luis F."
   year: 2026
   month: 8
-  version: "1.0"
-  notes: "Working preprint"
+  doi: "10.48550/arXiv.2601.11618"
+  url: "https://arxiv.org/abs/2601.11618"

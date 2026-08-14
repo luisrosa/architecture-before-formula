@@ -1,0 +1,457 @@
+\section{Receiver process, distinction shadows, and marked locality}\label{sec:receiver-access}
+
+This section defines the represented object on which the later compositional results act. The architecture first supplies an actual marked receiver interface. Fiber relations, unmarked factorization classes, quotients, and locality neighborhoods are then extracted from that process at deliberately coarser grains.
+
+\subsection{Marked receivers and represented receiver processes}
+
+Fix a represented update
+\[
+F:X\to Y.
+\]
+The spaces $X$ and $Y$ are already represented state spaces; the paper does not infer them from raw observations or implementation traces.
+
+\begin{definition}[Marked receiver presentation]\label{def:marked-receiver-presentation-v13}
+A marked receiver presentation of $Y$ consists of a finite receiver set $R$, receiver value spaces $(W_j)_{j\in R}$, a bijection
+\[
+\chi_Y:Y\xrightarrow{\cong}H_Y\subseteq\prod_{j\in R}W_j,
+\]
+and distinguished projections $\pi_j:H_Y\to W_j$.
+\end{definition}
+
+The receiver branches are
+\[
+B_j:=\pi_j\chi_YF:X\to W_j.
+\]
+The marks matter. A total-state recoding can preserve all extensional information while mixing coordinates that previously identified separate receiver obligations.
+
+\begin{definition}[Cut-level mark signature]\label{def:cut-mark-signature-v15}
+A cut-level mark signature on a represented carrier $Z$ is a finite family
+\[
+\mathfrak M_Z=\{m_\alpha:Z\to M_\alpha\}_{\alpha\in A}
+\]
+of declared mark maps. The index $\alpha$ names a role treated as constitutive by the comparison---for example a token, node, site, slot, head, source, or hidden-coordinate projection. The signature records only the marks declared at the selected grain; additional source construction, sharing, schedule, provenance, or finer represented cuts are not included unless explicitly added as marks.
+\end{definition}
+
+\begin{definition}[Represented receiver process]\label{def:receiver-factorization-v13}
+For each $j\in R$, a represented receiver process at the selected cut consists of a surjective, realized-image-corestricted interface
+\[
+Q_j:X\twoheadrightarrow Z_j,
+\]
+a receiver-local continuation
+\[
+G_j:Z_j\to W_j,
+\]
+and a declared cut-level mark signature $\mathfrak M_{Z_j}$ such that
+\[
+\boxed{B_j=G_jQ_j.}
+\]
+\end{definition}
+
+The definition is a claim about the represented architecture, not a canonical factorization inferred from $B_j$. The state $Q_j(x)$ is what the represented process supplies at this cut; $G_j$ acts afterward. Construction of $Q_j$, source resolution, aggregation, parameter sharing, provenance, internal continuation structure, and schedule may be refined when the scientific question requires them.
+
+\begin{lemma}[Factorization contraction]\label{lem:factorization-contraction-v13}
+Let $B=GQ$ with $Q:X\twoheadrightarrow Z$, and let $T:Z\to Z'$ be a bijection. Then
+\[
+\boxed{B=(GT^{-1})(TQ).}
+\]
+\end{lemma}
+
+\begin{proof}
+Associativity and $T^{-1}T=\Id_Z$ give the identity.
+\end{proof}
+
+The lemma exposes a many-to-one forgetting operation: the same composite branch can arise from different displayed intermediate maps. If $T$ appears as an active arrow in the represented process, the factorization through $TQ$ includes that additional transformation. If $T$ is used passively to redescribe the same intermediate state, the incident maps and the declared marks must be transported with the chart.
+
+\begin{definition}[Unmarked factorization isomorphism]\label{def:factorization-isomorphism-v14}
+Fix a branch $B:X\to W$. Two surjective factorizations
+\[
+B=GQ,
+\qquad
+B=G'Q',
+\]
+with $Q:X\twoheadrightarrow Z$ and $Q':X\twoheadrightarrow Z'$, are \emph{isomorphic as unmarked factorizations}, written
+\[
+(Q,G)\cong_{\mathrm{fac}}(Q',G'),
+\]
+when there exists a bijection $\zeta:Z\xrightarrow{\cong}Z'$ such that
+\[
+\boxed{Q'=\zeta Q,
+\qquad
+G=G'\zeta.}
+\]
+No coordinate, locality, provenance, sharing, or schedule mark is required to be preserved by $\cong_{\mathrm{fac}}$.
+\end{definition}
+
+\begin{proposition}[Factorization isomorphism is an equivalence relation]\label{prop:factorization-isomorphism-equivalence-v14}
+For a fixed branch $B$, the relation $\cong_{\mathrm{fac}}$ is reflexive, symmetric, and transitive on its surjective factorizations.
+\end{proposition}
+
+\begin{proof}
+The identity on $Z$ gives reflexivity. If $\zeta$ witnesses $(Q,G)\cong_{\mathrm{fac}}(Q',G')$, then $\zeta^{-1}$ witnesses the reverse relation. If $\zeta$ and $\eta$ witness two successive factorization isomorphisms, then $\eta\zeta$ witnesses their composite.
+\end{proof}
+
+\subsection{The distinction shadow of a presented interface}
+
+\begin{definition}[Distinction shadow]\label{def:distinction-shadow-v13}
+For any map $Q:X\to Z$, define
+\[
+\boxed{
+\mathsf D_X(Q):=\ker Q
+=\{(x,x')\in X^2:Q(x)=Q(x')\}.
+}
+\]
+When the domain is clear, write $\mathsf D(Q)$.
+\end{definition}
+
+The distinction shadow answers one extensional question: which predecessor states have become identical at the selected interface? It forgets the value space $Z$ as a presented carrier, the coordinate form of $Q(x)$, and every mark in $\mathfrak M_Z$.
+
+\begin{definition}[Distinction equivalence and refinement]\label{def:distinction-order-v13}
+For maps on one predecessor domain, write
+\[
+Q\equiv_DQ'
+\quad\Longleftrightarrow\quad
+\ker Q=\ker Q',
+\]
+and
+\[
+\boxed{Q\preceq_DQ'\quad\Longleftrightarrow\quad\ker Q'\subseteq\ker Q.}
+\]
+Thus $Q'$ is finer in predecessor distinctions.
+\end{definition}
+
+\begin{lemma}[Fiber factorization criterion]\label{lem:fiber-factorization-v13}
+Let $Q:X\twoheadrightarrow Z$ and $R:X\to U$. Then the following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\item there exists $h:Z\to U$ with $R=hQ$;
+\item $\ker Q\subseteq\ker R$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+A factorization makes $R$ constant on every $Q$-fiber. Conversely, if $R$ is constant on each fiber, define $h(Q(x)):=R(x)$. Fiber constancy gives well-definedness and surjectivity of $Q$ gives totality and uniqueness.
+\end{proof}
+
+The existence of $h$ is extensional. It does not imply that $h$ is already computed, receiver-local, low cost, or available to a restricted continuation family.
+
+\begin{theorem}[Distinction-shadow calculus]\label{thm:distinction-shadow-calculus-v13}
+Let $A:\Omega\to X$ and let $(Q_a:X\to Z_a)_{a\in I}$ be a family of maps.
+\begin{enumerate}[label=(\roman*)]
+\item \textbf{Precomposition.} For every $a$,
+\[
+\boxed{\mathsf D_\Omega(Q_aA)=(A\times A)^{-1}\mathsf D_X(Q_a).}
+\]
+\item \textbf{Joint presentation.} For the joint map $Q_I:=\langle Q_a\rangle_a$,
+\[
+\boxed{\mathsf D_X(Q_I)=\bigcap_{a\in I}\mathsf D_X(Q_a).}
+\]
+For an empty family the intersection is $X\times X$.
+\item \textbf{Injective post-processing.} If $T$ is injective on $\im Q_a$, then
+\[
+\boxed{\mathsf D_X(TQ_a)=\mathsf D_X(Q_a).}
+\]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+For (i), $Q_a(A\omega)=Q_a(A\omega')$ exactly when $(A\omega,A\omega')\in\ker Q_a$. For (ii), equality of joint tuples is equivalent to equality under every component. For (iii), injectivity of $T$ makes $TQ_a(x)=TQ_a(x')$ equivalent to $Q_a(x)=Q_a(x')$.
+\end{proof}
+
+\begin{theorem}[Unique conversion between equal distinction shadows]\label{thm:unique-conversion-v13}
+Let
+\[
+Q:X\twoheadrightarrow Z,
+\qquad
+Q':X\twoheadrightarrow Z'.
+\]
+Then $Q\equiv_DQ'$ if and only if there exists a unique bijection
+\[
+T:Z\xrightarrow{\cong}Z'
+\]
+such that
+\[
+\boxed{Q'=TQ.}
+\]
+\end{theorem}
+
+\begin{proof}
+A bijective $T$ preserves equality, so $Q'=TQ$ implies equal kernels. Conversely assume $\ker Q=\ker Q'$. Define $T(Q(x)):=Q'(x)$. Kernel equality gives well-definedness and injectivity; surjectivity of $Q'$ gives surjectivity of $T$; surjectivity of $Q$ gives uniqueness.
+\end{proof}
+
+The conversion $T$ is what the distinction shadow forgets about the carrier presentation. It can be trivial, receiver-local, globally mixing, computationally expensive, or inadmissible for a later continuation.
+
+\begin{theorem}[Classification of unmarked surjective branch factorizations]\label{thm:factorization-classification-v14}
+Fix $B:X\to W$, and let
+\[
+B=GQ=G'Q'
+\]
+with $Q:X\twoheadrightarrow Z$ and $Q':X\twoheadrightarrow Z'$. Then
+\[
+\boxed{
+Q\equiv_DQ'
+\quad\Longleftrightarrow\quad
+(Q,G)\cong_{\mathrm{fac}}(Q',G').
+}
+\]
+When these conditions hold, the factorization isomorphism is unique.
+\end{theorem}
+
+\begin{proof}
+If $\zeta$ witnesses factorization isomorphism, then $Q'=\zeta Q$ with $\zeta$ bijective, so the kernels agree. Conversely, if $Q\equiv_DQ'$, \Cref{thm:unique-conversion-v13} gives a unique bijection $T$ satisfying $Q'=TQ$. Since both factorizations realize the same branch,
+\[
+GQ=B=G'Q'=G'TQ.
+\]
+Surjectivity of $Q$ implies $G=G'T$. Thus $T$ is a factorization isomorphism, and uniqueness follows from the unique-conversion theorem.
+\end{proof}
+
+For a fixed branch, the distinction shadow completely classifies the unmarked surjective factorization up to passive carrier bijection. The remaining receiver-level question is whether that unique conversion lies among the passive mark transports admitted by the comparison.
+
+\subsection{Declared probes and canonical distinction quotients}
+
+A presented interface can be analyzed directly through its kernel. A scientific question may also declare a family of observations whose joint distinctions are the intended extensional grain.
+
+\begin{definition}[Receiver-access profile]\label{def:receiver-access-profile-v13}
+A receiver-access profile is a family
+\[
+\Phi_j=(\rho_{j,a}:X\to R_{j,a})_{a\in I_j}
+\]
+whose joint predecessor distinctions are marked for analysis at receiver $j$.
+\end{definition}
+
+By \Cref{thm:distinction-shadow-calculus-v13}(ii), the joint observation map has distinction relation
+\[
+E_{\Phi_j}:=\bigcap_{a\in I_j}\ker\rho_{j,a}.
+\]
+Define the canonical distinction quotient
+\[
+\operatorname{Rep}_X(\Phi_j):=q_{\Phi_j}:X\twoheadrightarrow X/E_{\Phi_j}.
+\]
+
+\begin{corollary}[Canonical distinction quotient]\label{cor:canonical-distinction-quotient-v13}
+Every profile coordinate factors uniquely through $q_{\Phi_j}$. If $p:X\twoheadrightarrow P$ is any surjective representation through which every profile coordinate factors, there is a unique $h:P\to X/E_{\Phi_j}$ with $q_{\Phi_j}=hp$. Hence $q_{\Phi_j}$ is the coarsest surjective extensional representation preserving the declared distinctions.
+\end{corollary}
+
+\begin{proof}
+Apply \Cref{lem:fiber-factorization-v13} to the joint profile relation. The usual quotient construction gives the claimed maps and uniqueness.
+\end{proof}
+
+The quotient is canonical after the profile has been declared, but it is not thereby the state computed by the architecture.
+
+\begin{corollary}[Exact branch realization from a distinction quotient]\label{cor:branch-realization-v13}
+There exists a unique extensional continuation $\bar G_j:X/E_{\Phi_j}\to W_j$ with
+\[
+B_j=\bar G_jq_{\Phi_j}
+\]
+if and only if
+\[
+E_{\Phi_j}\subseteq\ker B_j.
+\]
+\end{corollary}
+
+\subsection{Marked coordinate locality}
+
+Distinction shadows intentionally forget presentation. Architecture may also mark a product decomposition of a represented state. Let
+\[
+Z\subseteq\prod_{i\in I}Z_i,
+\qquad
+W\subseteq\prod_{r\in R}W_r
+\]
+with distinguished coordinate projections. For $N\subseteq I$, write $\pi_N^Z$ for the corresponding subproduct projection, corestricted to its realized image when needed.
+
+\begin{definition}[Marked locality]\label{def:marked-locality-v13}
+For a declared neighborhood family $(N_r\subseteq I)_{r\in R}$, a map $T:Z\to W$ is \emph{$N$-local} when, for every receiver $r$, there exists a map $t_r$ such that
+\[
+\boxed{\pi_r^WT=t_r\pi_{N_r}^Z.}
+\]
+For aligned same-carrier coordinates, \emph{coordinate-local} means $N_r=\{r\}$ for every $r$.
+\end{definition}
+
+\begin{theorem}[Composition of marked locality]\label{thm:locality-composition-v13}
+Let $Z\xrightarrow{T}W\xrightarrow{U}V$. Suppose $T$ is local with neighborhoods $(N_r\subseteq I)_{r\in R}$ and $U$ is local with neighborhoods $(M_k\subseteq R)_{k\in K}$. Then $UT$ is local with neighborhoods
+\[
+\boxed{L_k:=\bigcup_{r\in M_k}N_r.}
+\]
+\end{theorem}
+
+\begin{proof}
+For receiver $k$, $\pi_k^VU$ factors through the tuple of $W$-coordinates indexed by $M_k$. Each such coordinate $\pi_r^WT$ factors through the $Z$-coordinates indexed by $N_r$. Their joint tuple therefore factors through $\pi_{L_k}^Z$.
+\end{proof}
+
+\begin{theorem}[Affine locality by block support]\label{thm:affine-locality-v13}
+Let
+\[
+Z=\bigoplus_{i\in I}V_i,
+\qquad
+W=\bigoplus_{r\in R}U_r,
+\]
+and let $T(z)=Az+b$ with block maps $A_{ri}:V_i\to U_r$. Then $T$ is local with neighborhoods $(N_r)$ if and only if
+\[
+\boxed{A_{ri}=0\quad\text{for every }i\notin N_r.}
+\]
+\end{theorem}
+
+\begin{proof}
+If the forbidden blocks vanish, the $r$th output component depends only on $(z_i)_{i\in N_r}$. Conversely, factorization through those coordinates makes variation of any $i\notin N_r$ invisible to receiver $r$; linearity forces $A_{ri}=0$.
+\end{proof}
+
+\subsection{Passive marked re-presentation versus active conversion}
+
+\begin{definition}[Mark transport]\label{def:mark-transport-v15}
+Let $(Z,\mathfrak M_Z)$ and $(Z',\mathfrak M_{Z'})$ carry mark signatures
+\[
+\mathfrak M_Z=\{m_\alpha:Z\to M_\alpha\}_{\alpha\in A},
+\qquad
+\mathfrak M_{Z'}=\{m'_{\alpha'}:Z'\to M'_{\alpha'}\}_{\alpha'\in A'}.
+\]
+A mark transport
+\[
+\tau:\mathfrak M_Z\to\mathfrak M_{Z'}
+\]
+consists of a bijection $\varphi_\tau:A\to A'$ between mark roles and bijections
+\[
+\mu_{\tau,\alpha}:m_\alpha(Z)\xrightarrow{\cong}m'_{\varphi_\tau(\alpha)}(Z')
+\]
+between the realized images of the corresponding mark maps.
+\end{definition}
+
+\begin{definition}[Admissible mark-transport system]\label{def:admissible-mark-transport-v15}
+A marked comparison fixes, for every pair of mark signatures under comparison, a set
+\[
+\mathcal T(\mathfrak M_Z,\mathfrak M_{Z'})
+\]
+of mark transports declared passive. These sets satisfy:
+\begin{enumerate}[label=(\roman*)]
+\item the identity transport belongs to $\mathcal T(\mathfrak M_Z,\mathfrak M_Z)$;
+\item if $\tau\in\mathcal T(\mathfrak M_Z,\mathfrak M_{Z'})$, then the inverse transport $\tau^{-1}$ belongs to $\mathcal T(\mathfrak M_{Z'},\mathfrak M_Z)$;
+\item if $\tau_{12}\in\mathcal T(\mathfrak M_1,\mathfrak M_2)$ and $\tau_{23}\in\mathcal T(\mathfrak M_2,\mathfrak M_3)$, then $\tau_{23}\circ\tau_{12}\in\mathcal T(\mathfrak M_1,\mathfrak M_3)$, with
+\[
+\varphi_{23\circ12}=\varphi_{23}\circ\varphi_{12},
+\]
+and
+\[
+\mu_{23\circ12,\alpha}
+=
+\mu_{23,\varphi_{12}(\alpha)}\circ\mu_{12,\alpha}.
+\]
+\end{enumerate}
+The admissible system is fixed before a candidate carrier conversion is tested.
+\end{definition}
+
+\begin{definition}[Mark-preserving re-presentation]\label{def:mark-preserving-representation-v15}
+Let
+\[
+\tau=(\varphi_\tau,\{\mu_{\tau,\alpha}\})
+\in\mathcal T(\mathfrak M_Z,\mathfrak M_{Z'}).
+\]
+A carrier bijection $\zeta:Z\to Z'$ preserves the declared marks under $\tau$ when
+\[
+\boxed{
+m'_{\varphi_\tau(\alpha)}\zeta
+=\mu_{\tau,\alpha}m_\alpha
+\quad\text{for every }\alpha\in A.
+}
+\]
+For fixed aligned product-coordinate marks, the admissible system can require
+\[
+\pi_i^{Z'}\zeta=\zeta_i\pi_i^Z.
+\]
+An admitted receiver permutation is encoded by the role bijection $\varphi_\tau$.
+\end{definition}
+
+\begin{definition}[Passive marked receiver-process equivalence]\label{def:marked-process-equivalence-v14}
+Fix a branch $B:X\to W$ and an admissible mark-transport system $\mathcal T$. Two represented receiver processes
+\[
+\mathcal R=(Q,G,\mathfrak M_Z),
+\qquad
+\mathcal R'=(Q',G',\mathfrak M_{Z'})
+\]
+with $B=GQ=G'Q'$ are \emph{equivalent up to passive marked re-presentation}, written
+\[
+\mathcal R\cong_{\mathrm{rep}}\mathcal R',
+\]
+when there exist
+\[
+\tau\in\mathcal T(\mathfrak M_Z,\mathfrak M_{Z'})
+\]
+and a carrier bijection $\zeta:Z\xrightarrow{\cong}Z'$ preserving the marks under $\tau$ such that
+\[
+\boxed{Q'=\zeta Q,
+\qquad
+G=G'\zeta.}
+\]
+\end{definition}
+
+\begin{proposition}[Passive marked receiver-process equivalence is an equivalence relation]\label{prop:marked-process-equivalence-v14}
+For a fixed branch and a fixed admissible mark-transport system, $\cong_{\mathrm{rep}}$ is an equivalence relation.
+\end{proposition}
+
+\begin{proof}
+Reflexivity uses the identity carrier map and the identity admissible transport. If $\zeta$ preserves the marks under $\tau$, then $\zeta^{-1}$ preserves them under $\tau^{-1}$, giving symmetry. For transitivity, suppose $\zeta_{12}$ preserves $\tau_{12}$ and $\zeta_{23}$ preserves $\tau_{23}$. Then
+\[
+m^3_{\varphi_{23}(\varphi_{12}(\alpha))}\zeta_{23}\zeta_{12}
+=
+\mu_{23,\varphi_{12}(\alpha)}\mu_{12,\alpha}m^1_\alpha,
+\]
+so $\zeta_{23}\zeta_{12}$ preserves the composite admissible transport. \Cref{prop:factorization-isomorphism-equivalence-v14} supplies the corresponding commuting factorization equations.
+\end{proof}
+
+\begin{theorem}[Marked lift criterion]\label{thm:marked-lift-v14}
+Let $\mathcal R$ and $\mathcal R'$ be represented receiver processes for the same branch under a fixed admissible mark-transport system, with surjective interfaces $Q,Q'$. Suppose $Q\equiv_DQ'$, and let $T:Z\xrightarrow{\cong}Z'$ be the unique conversion from \Cref{thm:unique-conversion-v13}. Then
+\[
+\boxed{
+\mathcal R\cong_{\mathrm{rep}}\mathcal R'
+\quad\Longleftrightarrow\quad
+\text{there exists }\tau\in\mathcal T(\mathfrak M_Z,\mathfrak M_{Z'})
+\text{ such that }T\text{ preserves the marks under }\tau.
+}
+\]
+\end{theorem}
+
+\begin{proof}
+Because the two processes realize the same branch, \Cref{thm:factorization-classification-v14} already forces the unique conversion $T$ to satisfy the continuation square $G=G'T$. Hence $T$ witnesses passive marked process equivalence exactly when it also preserves the declared marks under an admissible transport. Conversely, any mark-preserving factorization isomorphism must equal $T$ by uniqueness.
+\end{proof}
+
+Equal kernels determine the unmarked factorization class and its unique conversion. The mark signature specifies what structure is inspected; the admissible transport system specifies which redescriptions of that structure count as passive.
+
+\begin{corollary}[Affine mark preservation]\label{cor:affine-mark-preservation-v13}
+For finite direct-sum vector presentations with fixed receiver-coordinate marks and an admissible transport system preserving fixed receiver alignment, an affine mark-preserving bijection has block-diagonal invertible linear part. If an explicit receiver permutation is admitted, the corresponding linear part is block-monomial.
+\end{corollary}
+
+\begin{proof}
+Coordinate-mark preservation makes every output coordinate depend only on its aligned input coordinate, so \Cref{thm:affine-locality-v13} gives block diagonality. Bijectivity forces each active diagonal block to be invertible. An admitted permutation relabels the nonzero block in each row and column.
+\end{proof}
+
+\begin{example}[Equal shadow and unmarked factorization class, different marked process]\label{ex:affine-presentation-v13}
+Let $X=Z=Z'=\R^2$ with fixed aligned scalar-coordinate marks, and let the admissible mark-transport system preserve those aligned roles. Define
+\[
+Q(u,v)=(u,v),
+\qquad
+Q'(u,v)=(u+v,u-v)=TQ(u,v),
+\]
+where
+\[
+T=\begin{pmatrix}1&1\\1&-1\end{pmatrix}.
+\]
+Take the common branch $B(u,v)=u$, with
+\[
+G(a,b)=a,
+\qquad
+G'(s,d)=\frac{s+d}{2}.
+\]
+Then $B=GQ=G'Q'$ and $Q\equiv_DQ'$ because $T$ is invertible. By \Cref{thm:factorization-classification-v14}, the unmarked factorizations are isomorphic through the unique conversion $T$. But $T$ is not block diagonal and therefore does not preserve the fixed coordinate marks under any admissible aligned transport. By \Cref{thm:marked-lift-v14},
+\[
+\boxed{
+Q\equiv_DQ'
+\quad\text{and}\quad
+(Q,G)\cong_{\mathrm{fac}}(Q',G')
+\quad\text{but}\quad
+\mathcal R\not\cong_{\mathrm{rep}}\mathcal R'.
+}
+\]
+Recovering $u$ from the mixed presentation requires the cross-coordinate continuation $(s,d)\mapsto(s+d)/2$ rather than a one-coordinate readout.
+\end{example}
+
+A passive re-presentation replaces one node by an isomorphic marked description and transports its incident maps under an admissible mark transport; the conversion is not an arrow executed by the represented architecture. By contrast, if the selected process contains
+\[
+Z\xrightarrow{T}Z'
+\]
+as an arrow between represented cuts, that arrow is part of the represented computation. Passive chart freedom does not delete represented arrows. Unmarked implementation refactorization below the selected architectural grain is a separate comparison problem.

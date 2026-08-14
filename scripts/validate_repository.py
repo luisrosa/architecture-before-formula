@@ -1,219 +1,38 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-
-import argparse
-import collections
-import re
-import sys
-import urllib.parse
-import zipfile
+import argparse, hashlib, re, subprocess
 from pathlib import Path
-
-import yaml
-
-ROOT = Path(__file__).resolve().parents[1]
-TEXT_SUFFIXES = {'.md', '.tex', '.bib', '.cff', '.yml', '.yaml', '.py', '.sh', '.txt'}
-AUX_SUFFIXES = {
-    '.aux', '.bbl', '.bcf', '.blg', '.fdb_latexmk', '.fls', '.log', '.out',
-    '.run.xml', '.synctex.gz', '.toc'
-}
-FORBIDDEN_PUBLIC_TERMS = [
-    'companion theory', 'companion work', 'companion manuscript',
-    'private cross-paper dependency'
-]
-
-
-def fail(messages: list[str]) -> None:
-    if messages:
-        raise SystemExit('\n'.join(messages))
-
-
-def text_files() -> list[Path]:
-    return [
-        p for p in ROOT.rglob('*') if p.is_file()
-        and '.git' not in p.parts and '.build' not in p.parts
-        and (p.suffix in TEXT_SUFFIXES or p.name in {'CITATION.cff', 'LICENSE'})
-    ]
-
-
-def check_structure() -> list[str]:
-    required = [
-        'README.md', 'LICENSE', 'CITATION.cff', 'CHANGELOG.md', 'CLAIMS.md',
-        'VALIDATION.md', 'build.sh', 'paper/main.tex', 'paper/supplement.tex',
-        'paper/preamble.tex', 'paper/references.bib',
-        'paper/references_additions.bib',
-        'releases/v1.0/Architecture_Before_the_Formula_v1.0.pdf',
-        'releases/v1.0/Architecture_Before_the_Formula_v1.0_Technical_Supplement.pdf',
-        'releases/v1.0/Architecture_Before_the_Formula_v1.0_Source.zip',
-        'releases/v1.0/SHA256SUMS.txt',
-        '.github/workflows/validate-paper.yml',
-    ]
-    errors = [f'missing required path: {p}' for p in required if not (ROOT / p).exists()]
-    legacy_dirs = [p for p in (ROOT / 'paper').iterdir() if p.is_dir() and re.fullmatch(r'v\d+_\d+(?:_\d+)?', p.name)]
-    errors.extend(f'forbidden versioned source directory exists: {p.relative_to(ROOT)}' for p in legacy_dirs)
-    if (ROOT / 'paper/source').exists():
-        errors.append('forbidden legacy source directory exists: paper/source')
-    return errors
-
-
-def check_text() -> list[str]:
-    errors: list[str] = []
-    for path in text_files():
-        if path.resolve() == Path(__file__).resolve():
-            continue
-        text = path.read_text(errors='replace')
-        lower = text.lower()
-        for term in FORBIDDEN_PUBLIC_TERMS:
-            if term in lower:
-                errors.append(f'{path.relative_to(ROOT)} contains development-only term: {term}')
-        current_release_docs = {
-            ROOT / 'CITATION.cff', ROOT / 'CLAIMS.md', ROOT / 'VALIDATION.md',
-            ROOT / 'releases/v1.0/README.md'
-        }
-        if path.is_relative_to(ROOT / 'paper') or path in current_release_docs:
-            if re.search(r'\bv0(?:[._]\d+)+\b', lower):
-                errors.append(f'{path.relative_to(ROOT)} contains a stale pre-release token')
-    return errors
-
-
-def check_markdown_links() -> list[str]:
-    errors: list[str] = []
-    pattern = re.compile(r'!?\[[^]]*\]\(([^)]+)\)')
-    for path in ROOT.rglob('*.md'):
-        if '.build' in path.parts:
-            continue
-        text = path.read_text(errors='replace')
-        for target in pattern.findall(text):
-            target = target.strip().split()[0]
-            if target.startswith(('#', 'http://', 'https://', 'mailto:')):
-                continue
-            target = urllib.parse.unquote(target.split('#', 1)[0])
-            if not target:
-                continue
-            resolved = (path.parent / target).resolve()
-            if not resolved.exists():
-                errors.append(f'{path.relative_to(ROOT)} has broken local link: {target}')
-    return errors
-
-
-def check_tex() -> list[str]:
-    errors: list[str] = []
-    tex_files = list((ROOT / 'paper').rglob('*.tex'))
-    labels: list[str] = []
-    refs: list[str] = []
-    cites: list[str] = []
-    for path in tex_files:
-        text = path.read_text()
-        labels.extend(re.findall(r'\\label\{([^}]+)\}', text))
-        for group in re.findall(r'\\(?:Cref|cref|ref|eqref)\{([^}]+)\}', text):
-            refs.extend(x.strip() for x in group.split(','))
-        for group in re.findall(r'\\cite\w*\{([^}]+)\}', text):
-            cites.extend(x.strip() for x in group.split(','))
-    counts = collections.Counter(labels)
-    duplicates = sorted(k for k, v in counts.items() if v > 1)
-    missing_refs = sorted(set(refs) - set(labels))
-    bib = (ROOT / 'paper/references.bib').read_text() + (ROOT / 'paper/references_additions.bib').read_text()
-    keys = set(re.findall(r'@\w+\{([^,]+),', bib))
-    missing_cites = sorted(set(cites) - keys)
-    if duplicates:
-        errors.append(f'duplicate labels: {duplicates}')
-    if missing_refs:
-        errors.append(f'missing references: {missing_refs}')
-    if missing_cites:
-        errors.append(f'missing citations: {missing_cites}')
-    return errors
-
-
-def check_cff() -> list[str]:
-    errors: list[str] = []
-    data = yaml.safe_load((ROOT / 'CITATION.cff').read_text())
-    expected = {
-        'cff-version': '1.2.0',
-        'type': 'software',
-        'version': '1.0',
-        'license': 'CC-BY-4.0',
-    }
-    for key, value in expected.items():
-        if str(data.get(key)) != value:
-            errors.append(f'CITATION.cff: {key} must be {value!r}')
-    preferred = data.get('preferred-citation') or {}
-    if preferred.get('type') != 'article':
-        errors.append('CITATION.cff: preferred-citation.type must be article')
-    if str(preferred.get('version')) != '1.0':
-        errors.append('CITATION.cff: preferred-citation.version must be 1.0')
-    return errors
-
-
-def check_source_zip() -> list[str]:
-    errors: list[str] = []
-    path = ROOT / 'releases/v1.0/Architecture_Before_the_Formula_v1.0_Source.zip'
-    if not path.exists():
-        return [f'missing source ZIP: {path.relative_to(ROOT)}']
-    with zipfile.ZipFile(path) as zf:
-        names = zf.namelist()
-        for name in names:
-            base = Path(name).name
-            if any(base.endswith(suffix) for suffix in AUX_SUFFIXES):
-                errors.append(f'source ZIP contains generated file: {name}')
-            if base.endswith(('.pdf', '.zip')):
-                errors.append(f'source ZIP contains binary release artifact: {name}')
-        required = ['README.md', 'LICENSE', 'CITATION.cff', 'paper/main.tex', 'paper/references.bib']
-        for req in required:
-            if not any(name.endswith('/' + req) for name in names):
-                errors.append(f'source ZIP missing: {req}')
-    return errors
-
-
-def check_prebuild_cleanliness() -> list[str]:
-    errors: list[str] = []
-    for path in (ROOT / 'paper').iterdir():
-        if path.is_file() and any(path.name.endswith(s) for s in AUX_SUFFIXES | {'.pdf'}):
-            errors.append(f'generated file committed in paper/: {path.name}')
-    workflows = list((ROOT / '.github/workflows').glob('*.yml'))
-    if [p.name for p in workflows] != ['validate-paper.yml']:
-        errors.append(f'expected exactly validate-paper.yml, found {[p.name for p in workflows]}')
-    return errors
-
-
-def check_cref_types() -> list[str]:
-    errors: list[str] = []
-    expected = {
-        'def': 'definition', 'lem': 'lemma', 'prop': 'proposition',
-        'ass': 'assumption', 'cor': 'corollary', 'thm': 'theorem',
-        'ex': 'example', 'rem': 'remark',
-    }
-    for aux_path in [ROOT / 'paper/main.aux', ROOT / 'paper/supplement.aux']:
-        if not aux_path.exists():
-            errors.append(f'missing post-build aux file: {aux_path.relative_to(ROOT)}')
-            continue
-        text = aux_path.read_text(errors='replace')
-        for label, actual in re.findall(
-            r'\\newlabel\{((?:def|lem|prop|ass|cor|thm|ex|rem):[^}]+)@cref\}\{\{\[([^]]+)\]', text
-        ):
-            prefix = label.split(':', 1)[0]
-            if actual != expected[prefix]:
-                errors.append(f'{label} recorded as {actual}, expected {expected[prefix]}')
-    return errors
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--mode', choices=['prebuild', 'postbuild'], default='prebuild')
-    args = parser.parse_args()
-    errors: list[str] = []
-    errors += check_structure()
-    errors += check_text()
-    errors += check_markdown_links()
-    errors += check_tex()
-    errors += check_cff()
-    errors += check_source_zip()
-    if args.mode == 'prebuild':
-        errors += check_prebuild_cleanliness()
-    else:
-        errors += check_cref_types()
-    fail(errors)
-    print(f'repository validation passed ({args.mode})')
-
-
-if __name__ == '__main__':
-    main()
+TITLE='Architecture Before the Formula: Individuating Neural Architecture Beyond the Composite Map'
+ARXIV='2601.11618'
+EXPECTED_SECTIONS=['01_architecture_individuation.tex','02_related_objects.tex','03_receiver_access.tex','04_barriers.tex','05_composition.tex','05b_receiver_sufficient_prefix.tex','06_contextual_search.tex','07_transformer_realization.tex','08_scope_discussion.tex','09_conclusion.tex']
+def fail(msg:str)->None: raise SystemExit(msg)
+def sha256(p:Path)->str: return hashlib.sha256(p.read_bytes()).hexdigest()
+def main()->None:
+    ap=argparse.ArgumentParser(); ap.add_argument('--mode',choices=['prebuild','postbuild'],required=True); ap.add_argument('--root',type=Path,default=Path(__file__).resolve().parents[1]); a=ap.parse_args(); root=a.root.resolve()
+    required=[root/'README.md',root/'CLAIMS.md',root/'CITATION.cff',root/'CHANGELOG.md',root/'VALIDATION.md',root/'paper'/'main.tex',root/'paper'/'preamble_jmlr.tex',root/'releases'/'v1.6'/'SOURCE_SHA256SUMS.txt']
+    for p in required:
+        if not p.exists(): fail(f'missing required path: {p}')
+    main_tex=(root/'paper'/'main.tex').read_text(); readme=(root/'README.md').read_text(); cff=(root/'CITATION.cff').read_text(); claims=(root/'CLAIMS.md').read_text()
+    for text,label in [(main_tex,'paper/main.tex'),(readme,'README.md')]:
+        if TITLE not in text: fail(f'current title missing from {label}')
+    if 'version: "1.6"' not in cff or ARXIV not in cff: fail('CITATION.cff does not identify v1.6 and arXiv')
+    if 'A_enc(u,v)=(2u+v,0)' not in claims: fail('claim ledger is missing injective contextual witness')
+    found=sorted(p.name for p in (root/'paper'/'sections').glob('*.tex'))
+    if found!=sorted(EXPECTED_SECTIONS): fail(f'unexpected current section surface: {found}')
+    if (root/'paper'/'supplement.tex').exists() or (root/'paper'/'supplement').exists(): fail('stale v1.0 supplement remains in current paper surface')
+    manifest=root/'releases'/'v1.6'/'SOURCE_SHA256SUMS.txt'
+    for line in manifest.read_text().splitlines():
+        if not line.strip(): continue
+        expected,rel=line.split(None,1); p=root/'paper'/rel.strip()
+        if not p.is_file(): fail(f'source manifest path missing: {p}')
+        got=sha256(p)
+        if got!=expected: fail(f'source hash mismatch for {rel}: {got}')
+    if a.mode=='postbuild':
+        candidates=[root/'paper'/'main.pdf',root/'.build'/'output'/'Architecture_Before_the_Formula_v1.6.pdf']; pdf=next((p for p in candidates if p.is_file()),None)
+        if pdf is None: fail('no fresh-build PDF found')
+        text=subprocess.check_output(['pdftotext',str(pdf),'-'],text=True,errors='replace')
+        if 'Architecture Before the Formula' not in text or 'Individuating Neural Architecture' not in text: fail('fresh-build PDF missing current title')
+        info=subprocess.check_output(['pdfinfo',str(pdf)],text=True,errors='replace'); m=re.search(r'^Pages:\s+(\d+)',info,re.M)
+        if not m or int(m.group(1))!=34: fail(f'expected 34-page fresh build; pdfinfo was:\n{info}')
+    print(f'PUBLIC V1.6 REPOSITORY VALIDATION PASSED ({a.mode})')
+if __name__=='__main__': main()

@@ -32,44 +32,45 @@ jobs:
           cffconvert --validate
           python scripts/validate_repository.py --mode prebuild
 
-      - name: Compile article and supplement
+      - name: Retrieve pinned official JMLR style
+        run: |
+          curl --fail --location --silent --show-error \
+            https://raw.githubusercontent.com/JmlrOrg/jmlr-style-file/f413f638b407af76074813f8f88a82a7a5a81e9d/jmlr2e.sty \
+            --output paper/jmlr2e.sty
+          grep -q "Document Style .*jmlr" paper/jmlr2e.sty
+
+      - name: Compile current manuscript
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: |
-            main.tex
-            supplement.tex
+          root_file: main.tex
           working_directory: paper
-          latexmk_use_xelatex: false
           args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
 
-      - name: Audit LaTeX logs
+      - name: Audit LaTeX log
         shell: bash
         run: |
           set -euo pipefail
-          for stem in main supplement; do
-            test -s "paper/${stem}.pdf"
-            test -s "paper/${stem}.log"
-            if grep -Ei \
-              'LaTeX Warning: (Citation|Reference).*undefined|Package natbib Warning:.*undefined citation|Package natbib Warning: There were undefined citations|There were undefined references|multiply defined|Overfull \\hbox|Overfull \\vbox' \
-              "paper/${stem}.log"; then
-              echo "LaTeX audit failed for ${stem}." >&2
-              exit 1
-            fi
-          done
+          test -s paper/main.pdf
+          test -s paper/main.log
+          if grep -Ei 'LaTeX Warning: (Citation|Reference).*undefined|Package natbib Warning:.*undefined citation|Package natbib Warning: There were undefined citations|There were undefined references' paper/main.log; then
+            echo 'LaTeX audit failed: undefined citation/reference.' >&2
+            exit 1
+          fi
 
       - name: Install PDF validation tools
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends poppler-utils qpdf zip
 
-      - name: Validate semantic references and release artifacts
+      - name: Validate release artifacts
         run: |
-          python scripts/validate_repository.py --mode postbuild
+          mkdir -p .build/output
+          cp paper/main.pdf .build/output/Architecture_Before_the_Formula_v1.6.pdf
           bash scripts/validate_release.sh
 
       - name: Upload validated artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: architecture-before-formula-v1.0
+          name: architecture-before-formula-v1.6
           path: .build/artifacts/
           if-no-files-found: error

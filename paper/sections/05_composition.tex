@@ -1,0 +1,306 @@
+\section{Architecture under composition}\label{sec:composition}
+
+A downstream architecture never acts on its nominal input space in isolation. It acts on the represented states that an upstream computation actually produces. If $A:\Omega\to X$ supplies those states and $Q:X\to Z$ is a downstream receiver interface, then the receiver sees $QA$, not $Q$ by itself. Two downstream interfaces that are distinct on all of $X$ can therefore become indistinguishable on the image of $A$; conversely, a surjective prefix preserves every ambient distinction between them.
+
+At the distinction grain this dependence has a simple exact form. Precomposition pulls kernels back, and joint presentation intersects them. The results below use those two operations to separate three questions: which downstream distinction classes remain distinct after a prefix, which distinctions are available somewhere across a parameter family, and when an earlier representation already bounds everything that family can resolve.
+
+\subsection{Recutting and refinement}
+
+Let $A:\Omega\to X$ be an upstream represented computation and $Q:X\twoheadrightarrow Z$ a downstream interface.
+
+\begin{definition}[Recut interface]\label{def:recut-interface-v13}
+Define
+\[
+A^*Q:\Omega\twoheadrightarrow\im(QA),
+\qquad
+A^*Q(\omega):=Q(A\omega).
+\]
+\end{definition}
+
+\begin{theorem}[Recutting distinction theorem]\label{thm:recutting-v13}
+\[
+\boxed{
+\mathsf D_\Omega(A^*Q)
+=(A\times A)^{-1}\mathsf D_X(Q).
+}
+\]
+For a declared profile $\Phi=(\rho_a)_a$ this gives
+\[
+E_{A^*\Phi}=(A\times A)^{-1}(E_\Phi),
+\qquad
+\operatorname{Rep}_\Omega(A^*\Phi)
+\equiv_D
+A^*\operatorname{Rep}_X(\Phi).
+\]
+\end{theorem}
+
+\begin{proof}
+The first identity is \Cref{thm:distinction-shadow-calculus-v13}(i). Apply it coordinatewise to $\Phi$ and commute inverse image with intersection; the quotient statement follows from equality of kernels.
+\end{proof}
+
+The last equivalence concerns predecessor distinctions only. \Cref{thm:unique-conversion-v13} supplies a unique conversion between the realized quotient presentations, but the equality of kernels does not declare that conversion passive.
+
+\begin{corollary}[Recutting preserves distinction refinement]\label{cor:recutting-monotone-v13}
+If $Q\preceq_DQ'$, then $A^*Q\preceq_DA^*Q'$.
+\end{corollary}
+
+\begin{proposition}[Surjective recutting reflects distinction refinement]\label{prop:surjective-reflection-v13}
+If $A:\Omega\twoheadrightarrow X$ is surjective, then
+\[
+\boxed{
+A^*Q\preceq_DA^*Q'
+\quad\Longleftrightarrow\quad
+Q\preceq_DQ'.
+}
+\]
+\end{proposition}
+
+\begin{proof}
+Preservation is the preceding corollary. For reflection, if $Q'(x)=Q'(x')$, choose preimages $A\omega=x$ and $A\omega'=x'$. Inclusion $\ker(Q'A)\subseteq\ker(QA)$ then gives $Q(x)=Q(x')$.
+\end{proof}
+
+A prefix can merge two ambient distinction classes only by restricting the downstream maps to a proper reachable part of their nominal domain. Surjective prefixes leave the ambient refinement relation unchanged.
+
+\subsection{What varies across a parameter family?}
+
+Let
+\[
+\mathcal Q_j
+=
+\{Q_{j,\theta}:X\twoheadrightarrow Z_{j,\theta}\}_{\theta\in\Theta},
+\qquad \Theta\neq\varnothing.
+\]
+
+There are two useful family-level questions. The first asks which effective predecessor partitions occur as parameters vary. The second asks which predecessor distinctions are available somewhere across the family as a whole. These are different summaries.
+
+\begin{definition}[Ambient and effective distinction-class sets]\label{def:distinction-class-sets-v13}
+\[
+\mathcal C_X(\mathcal Q_j)
+:=
+\{[Q_{j,\theta}]_D:\theta\in\Theta\},
+\qquad
+\boxed{
+\mathcal C_A(\mathcal Q_j)
+:=
+\{[Q_{j,\theta}A]_D:\theta\in\Theta\}.
+}
+\]
+\end{definition}
+
+The class set keeps parameter-state variation only at the predecessor-distinction grain. It forgets parameter labels, multiplicities, interface coordinates, and continuation structure.
+
+\begin{proposition}[Context Reduction Map]\label{prop:context-reduction-v13}
+Recutting induces a well-defined surjection
+\[
+\boxed{
+\mathfrak r_A:
+\mathcal C_X(\mathcal Q_j)
+\twoheadrightarrow
+\mathcal C_A(\mathcal Q_j),
+\qquad
+[Q]_D\longmapsto[QA]_D.
+}
+\]
+It is noninjective exactly when the prefix merges ambient distinction classes within the family, and is bijective when $A$ is surjective.
+\end{proposition}
+
+\begin{proof}
+Well-definedness and merging follow from kernel pullback; surjective $A$ reflects equality by \Cref{prop:surjective-reflection-v13}.
+\end{proof}
+
+The map makes contextual redundancy explicit: two parameter states can be distinct in the ambient family yet land in the same effective distinction class after the prefix.
+
+\begin{definition}[Family distinction envelope]\label{def:family-envelope-v13}
+The family distinction envelope is the canonical quotient of the joint recut family,
+\[
+\boxed{
+J_{A,\mathcal Q_j}
+:=
+\operatorname{Rep}_\Omega((Q_{j,\theta}A)_\theta),
+}
+\]
+so by \Cref{thm:distinction-shadow-calculus-v13}(ii),
+\[
+\boxed{
+\ker J_{A,\mathcal Q_j}
+=
+\bigcap_{\theta\in\Theta}\ker(Q_{j,\theta}A).
+}
+\]
+\end{definition}
+
+The envelope answers the second question: which predecessor distinctions survive in at least one parameter state? It is a joint extensional summary. It need not be the interface realized by any one parameter value and it does not describe how its distinctions are presented or used.
+
+\begin{corollary}[Universal property of the family distinction envelope]\label{cor:family-envelope-v13}
+For every $\theta$,
+\[
+Q_{j,\theta}A\preceq_DJ_{A,\mathcal Q_j}.
+\]
+If $Q_{j,\theta}A\preceq_DP$ for every $\theta$, then
+\[
+J_{A,\mathcal Q_j}\preceq_DP.
+\]
+\end{corollary}
+
+\begin{proof}
+The envelope kernel is the intersection of the effective kernels.
+\end{proof}
+
+Writing $\bar A:\Omega\twoheadrightarrow\im A$ for the corestricted prefix gives
+\begin{equation}\label{eq:distinction-hierarchy-v13}
+\boxed{
+Q_{j,\theta}A
+\preceq_D
+J_{A,\mathcal Q_j}
+\preceq_D
+\bar A.
+}
+\end{equation}
+
+\begin{proposition}[Distinction-class sets determine envelopes, not conversely]\label{prop:classes-vs-envelope-v13}
+If
+\[
+\mathcal C_A(\mathcal Q)=\mathcal C_A(\mathcal Q'),
+\]
+then
+\[
+J_{A,\mathcal Q}\equiv_DJ_{A,\mathcal Q'}.
+\]
+The converse is false.
+\end{proposition}
+
+\begin{proof}
+Equal class sets give the same set of kernels and hence the same intersection. For the converse take $A=\Id$ on $\{0,1\}^2$, with
+\[
+Q_1(x_1,x_2)=x_1,
+\quad
+Q_2(x_1,x_2)=x_2,
+\quad
+Q_{12}(x_1,x_2)=(x_1,x_2).
+\]
+Families $\{Q_1,Q_2\}$ and $\{Q_{12}\}$ have the same identity envelope but class sets $\{[Q_1]_D,[Q_2]_D\}$ and $\{[Q_{12}]_D\}$.
+\end{proof}
+
+The difference matters for architecture comparison. $\mathcal C_A$ remembers which distinction structures occur across parameter states; $J_{A,\mathcal Q}$ forgets that variation and keeps only the joint information ceiling. The ambient envelope $J_{\mathcal Q_j}:=\operatorname{Rep}_X((Q_{j,\theta})_\theta)$ satisfies
+\[
+J_{A,\mathcal Q_j}\equiv_DA^*J_{\mathcal Q_j}
+\]
+by the same recutting identity.
+
+\subsection{When an earlier representation already bounds the family}
+
+Let $P:\Omega\twoheadrightarrow U$ be an earlier-cut interface. The next criterion asks whether every downstream parameter state is already a function of $P$.
+
+\begin{proposition}[Parameter-uniform distinction factorization criterion]\label{prop:uniform-factorization-v13}
+The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\item for every $\theta$ there is $R_\theta:U\to Z_{j,\theta}$ with $Q_{j,\theta}A=R_\theta P$;
+\item equality under $P$ implies equality under every $Q_{j,\theta}A$;
+\item
+\[
+\boxed{J_{A,\mathcal Q_j}\preceq_DP.}
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+By \Cref{lem:fiber-factorization-v13}, (i)--(ii) are equivalent to
+\[
+\ker P\subseteq\ker(Q_{j,\theta}A)
+\quad\forall\theta,
+\]
+which by kernel intersection is equivalent to (iii).
+\end{proof}
+
+Suppose
+\[
+B_{j,\theta}=G_{j,\theta}Q_{j,\theta}A.
+\]
+If the criterion holds, every branch in the family is constrained by the distinctions already available through $P$.
+
+\begin{corollary}[Parameter-uniform deterministic barrier]\label{cor:uniform-deterministic-v13}
+Under \Cref{prop:uniform-factorization-v13}, for every target $f:\Omega\to(W,d)$ and every $\theta$,
+\[
+\boxed{
+\sup_\omega d\bigl(f(\omega),B_{j,\theta}(\omega)\bigr)
+\ge
+\frac12\Delta_P(f).
+}
+\]
+\end{corollary}
+
+\begin{corollary}[Parameter-uniform Bayes-risk floor]\label{cor:uniform-bayes-v13}
+Let $H$ be $\Omega$-valued and $Y$ finite-dimensional Euclidean-valued with finite second moment. Assume $P$ and the effective interfaces are measurable, the relevant predictors are square-integrable, and the factorizations from \Cref{prop:uniform-factorization-v13} can be chosen with measurable maps
+\[
+R_\theta:\im P\to\im(Q_{j,\theta}A),
+\qquad
+Q_{j,\theta}A=R_\theta P.
+\]
+With
+\[
+m_P:=\E[Y\mid\sigma(P(H))],
+\]
+every downstream parameter state, and more generally every measurable square-integrable continuation after an effective family interface, satisfies
+\[
+\boxed{
+\E\|Y-\widehat Y\|^2
+\ge
+\E\|Y-m_P\|^2.
+}
+\]
+\end{corollary}
+
+\begin{proof}
+For a measurable continuation $g_\theta$ after an effective interface,
+\[
+\widehat Y=g_\theta Q_{j,\theta}A(H)=g_\theta R_\theta P(H),
+\]
+so $\widehat Y$ is $\sigma(P(H))$-measurable. Apply \Cref{thm:squared-decomposition-v13} or the $L^2$ projection property of $m_P$.
+\end{proof}
+
+The deterministic bound follows from the family distinction restriction itself. The Bayes floor additionally needs the displayed measurable factorization through $P$. Approximate statements depend on still more of the actual presentation.
+
+\subsection{Approximate contextual bounds}\label{subsec:approx-context-v13}
+
+Give each effective interface codomain a metric $d_\theta$ and the target codomain metric $d$. Define
+\[
+\omega_P(Q_{j,\theta}A)
+:=
+\sup_{P(\omega)=P(\omega')}
+ d_\theta\bigl(Q_{j,\theta}A(\omega),Q_{j,\theta}A(\omega')\bigr).
+\]
+
+\begin{theorem}[Approximate contextual barrier]\label{thm:approx-context-v13}
+If
+\[
+G_{j,\theta}:(\im(Q_{j,\theta}A),d_\theta)\to(W,d)
+\]
+is $L_\theta$-Lipschitz and
+\[
+L_\theta\omega_P(Q_{j,\theta}A)\le\eta
+\quad\forall\theta,
+\]
+then
+\[
+\boxed{
+\sup_\omega d\bigl(f(\omega),G_{j,\theta}Q_{j,\theta}A(\omega)\bigr)
+\ge
+\frac12\bigl(\Delta_P(f)-\eta\bigr)_+
+}
+\]
+for every $\theta$.
+\end{theorem}
+
+\begin{proof}
+For two states in one $P$-fiber, Lipschitzness bounds the branch-output difference by $\eta$. The triangle inequality then bounds one endpoint error below by half the target separation minus $\eta$; take the positive part and supremum.
+\end{proof}
+
+Here the exact distinction shadow is no longer enough. The metric on the presented interface and the Lipschitz behavior of the continuation matter, so a passive re-presentation must transport that additional structure as well.
+
+\subsection{Local and global are cut-relative}
+
+Marked dependency composes by \Cref{thm:locality-composition-v13}. A coordinate-local downstream operation can therefore depend on a broad set of earlier coordinates after a mixing prefix, while restriction to a reachable image can reduce effective dependence. Separately, if
+\[
+J_{A,\mathcal Q_j}\preceq_DP_j^{\mathrm{local}},
+\]
+then the entire downstream family is bounded by the declared earlier-cut local distinction representation even when its immediate formula performs broad routing. Locality of the displayed operation and availability of predecessor distinctions are different questions, and both change with the cut at which the architecture is examined.

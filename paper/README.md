@@ -1,37 +1,13 @@
-# Current manuscript source - v1.0
+# Current paper source — v1.6
 
-This directory contains the authoritative source for:
+This directory contains the current public source for *Architecture Before the Formula: Individuating Neural Architecture Beyond the Composite Map*.
 
-**Architecture Before the Formula: Receiver-Wise Factorization and the Reconstruction of Transformer Blocks**
+The maintained manuscript body is byte-identical to the frozen v1.6 scientific source. The public archival manuscript is arXiv:2601.11618v3; its upload packet uses the same scientific body with upload-facing file naming and bibliography packaging. The exact frozen JMLR-submission PDF is identified by SHA-256 in `../releases/v1.6/README.md`; private submission-administration materials are not duplicated here.
 
-## Conceptual spine
-
-The paper is conditional on a represented update `F : X -> Y`. A marked successor presentation determines receiver branches `B_j`, and an architecture is defined by the marked receiver-wise factorizations
-
-```text
-B_j = G_j Q_j.
-```
-
-- `Q_j` is the receiver interface.
-- `G_j` is the receiver-local continuation.
-- Attention is a restricted refinement of `Q_j`.
-- The FFN is a marked refinement of `G_j`.
-- Stochastic variable-successor laws are retained only as a supplement extension.
-
-## Files
-
-- `main.tex` - main article
-- `supplement.tex` - technical supplement
-- `preamble.tex` - shared LaTeX configuration
-- `references.bib` and `references_additions.bib` - complete bibliography
-- `sections/` - main-article sections
-- `supplement/` - proofs, variants, and stochastic extensions
-- `build.sh` - direct in-directory build helper
-
-From the repository root, prefer:
+## Build
 
 ```bash
 bash ./build.sh
 ```
 
-That command compiles from a temporary copy and writes final PDFs to `.build/output/`, leaving this directory clean.
+The build retrieves the official `jmlr2e.sty` file from a pinned upstream JMLR style-file commit, then uses the standard TeX packages named by the manuscript source. The style file is a third-party build dependency rather than part of the manuscript source.

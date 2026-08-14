@@ -1,39 +1,50 @@
-\input{preamble}
+\input{preamble_jmlr}
 
-\title{\textbf{Architecture Before the Formula}\\
-\large Receiver-Wise Factorization and the Reconstruction of Transformer Blocks}
-\author{Luis F. Rosario Freytes\\University of Michigan, Ann Arbor}
-\date{Working preprint v1.0 --- August 2026}
+\hypersetup{
+  pdftitle={Architecture Before the Formula: Individuating Neural Architecture Beyond the Composite Map},
+  pdfauthor={Luis F. Rosario Freytes},
+  pdfsubject={Neural architecture individuation, represented receiver processes, receiver access, and composition},
+  pdfkeywords={neural architecture, receiver access, composition, architecture search, Transformers}
+}
+
+\ShortHeadings{Individuating Neural Architecture}{Rosario Freytes}
+\firstpageno{1}
 
 \begin{document}
+
+\title{Architecture Before the Formula: Individuating Neural Architecture Beyond the Composite Map}
+
+\author{\name Luis F. Rosario Freytes \email luisrosa@umich.edu \\
+       \addr University of Michigan\\
+       Ann Arbor, MI 48109, USA}
+
 \maketitle
 
 \begin{abstract}
-Neural architectures are usually introduced by formulas, but a represented input--output map does not by itself determine which successor obligations are separately addressed, what information reaches each receiver, or how the resulting local continuation is organized. We define an architecture, conditional on a represented update $F:X\to Y$, as a marked receiver-wise factorization. A marked presentation of the successor state determines receiver branches $B_j$, and an architectural presentation specifies factorizations $B_j=G_jQ_j$, where $Q_j$ is the information made available to receiver $j$ and $G_j$ is its local continuation. This object yields a full-access collapse theorem, a canonical answer quotient that is extensionally sufficient but not architecturally identifying, a refinement preorder on interfaces, and exact and approximate barriers induced by interface fibers. Refining $Q_j$ into retained local state, source-resolved contributions, and aggregation separates what is computed source by source from the receiver macrostate that survives. In an additive linear regime, the refinement produces a state-indexed operator family. Under further commitments---pairwise scalar evidence, positive compositional linking, receiver-row anchoring, source-local payloads, additive aggregation, and one shared finite-separation-rank score family---the receiver interface takes the form of masked query--key softmax attention. In this positive scalar specialization, the routing law also admits receiver-relative effective-potential and free-energy coordinates. The pointwise feedforward sublayer is reconstructed on the other side of the factorization: its marked intermediate activation coordinates refine the receiver-local continuation $G_j$. A canonical PreNorm Transformer block is therefore a coarse attention-constructed receiver interface followed by a structured local continuation, with a finer two-sublayer presentation available when the intermediate residual state is marked. The framework identifies general architectural coordinates, distinguishes provenance typing from realized dependence, and states the additional evidence required to pass from an exact architectural presentation to an implementation-facing mechanism claim. A compact extension allows the marked successor presentation itself to vary across receiver sectors.
+Neural architecture is often identified by module syntax, computation graphs, or the composite functions they realize. These descriptions answer different identity questions. We study the represented process available at a receiver: an actual factorization $B_j=G_jQ_j$ in which $Q_j(x)$ is the intermediate state supplied for further computation. Forgetting the presentation and retaining only $\ker Q_j$ yields the predecessor distinctions preserved at that cut. For a fixed branch, this extensional shadow exactly classifies unmarked surjective factorizations up to unique carrier re-presentation, but it does not determine marked receiver organization or the accessibility of retained information to restricted continuations. Under composition the relevant interface is $Q_{j,\theta}A$, so downstream architectural distinctions depend on the states produced upstream. An exact two-token construction shows that local and attention schemas are distinction-equivalent after one injective prefix and inequivalent after another, even though neither prefix loses predecessor information. The result exposes a context dependence hidden by modular architecture labels and motivates architecture comparison at the represented-process level.
 \end{abstract}
 
+\begin{keywords}
+neural architecture, receiver access, composition, architecture search, Transformers
+\end{keywords}
+
 \paragraph{Assistance disclosure.}
-Large language models were used as assistive tools for formalization, literature search, code and typesetting support, and language editing. The author supplied the conceptual program and retains responsibility for verifying the arguments, references, and wording before submission.
+Large language models were used as assistive tools for formalization, literature search, code and typesetting support, and language editing. The author supplied the conceptual program and retains responsibility for the arguments, references, and wording.
 
-\paragraph{Masked-score convention.}
-A finite pair score is required only on the admissible receiver--source relation. Hard exclusion is represented by a separate mask. Any finite extension off the admissible relation is mathematically immaterial because masked coefficients are set to zero.
+\paragraph{Conventions.}
+Represented state spaces are nonempty unless a result explicitly states otherwise. Interface maps are corestricted to their realized images when surjectivity is used. For a map $Q$, its distinction shadow is $\mathsf D(Q):=\ker Q$. Distinction refinement is $Q\preceq_D Q'$ when $\ker Q'\subseteq\ker Q$; write $Q\prec_D Q'$ for strict refinement and $Q\equiv_D Q'$ for equality of kernels. Marked receiver-process comparisons fix an admissible transport system for the declared cut-level marks before carrier conversions are tested. Conditional-expectation and squared-loss statements use finite-dimensional Euclidean-valued random targets with finite second moment and square-integrable predictors on the declared interface. Hard attention exclusion is represented by a separate mask; finite scores and positive baselines are required only on admissible receiver--source pairs.
 
-\paragraph{Squared-loss convention.}
-Conditional-expectation and squared-loss statements use finite-dimensional Euclidean-valued random targets with finite second moment; every compared predictor is square-integrable on the declared interface.
+\input{sections/01_architecture_individuation}
+\input{sections/02_related_objects}
+\input{sections/03_receiver_access}
+\input{sections/04_barriers}
+\input{sections/05_composition}
+\input{sections/05b_receiver_sufficient_prefix}
+\input{sections/06_contextual_search}
+\input{sections/07_transformer_realization}
+\input{sections/08_scope_discussion}
+\input{sections/09_conclusion}
 
-\input{sections/01_introduction}
-\input{sections/02_receiver_factored_foundation}
-\input{sections/03_interface_refinement}
-\input{sections/04_provenance_and_routing}
-\input{sections/05_attention_normal_form}
-\input{sections/06_local_continuation_ffn}
-\input{sections/07_full_block}
-\input{sections/08_coordinates_and_comparisons}
-\input{sections/09_variable_population}
-\input{sections/10_mechanism_boundary}
-\input{sections/11_conclusion}
-
-\bibliographystyle{plainnat}
-\bibliography{references,references_additions}
+\bibliography{references,references_additions,references_v1_1_additions,references_v1_5_additions}
 
 \end{document}

@@ -1,0 +1,55 @@
+\section{What counts as the same architecture?}\label{sec:architecture-individuation}
+
+Neural architecture is treated as a design variable before the identity of that variable is made explicit. A search problem
+\[
+A^\star\in\argmin_{A\in\mathcal A}\mathcal L(A)
+\]
+already presupposes an individuation rule for $\mathcal A$: when do two descriptions count as the same architecture? Module syntax, computation graphs, realized functions, and represented intermediate processes need not give the same answer. Benchmarks quotient graph-isomorphic cells \citep{ying2019nasbench}; architecture encodings can alter search behavior \citep{white2020encodings}; function-preserving transformations can change network structure \citep{wei2016networkmorphism}; and attention can realize convolutional functions \citep{cordonnier2020relationship}. Each description forgets different structure.
+
+The composite function is the clearest place to start. Fix a represented update $F:X\to Y$ and receiver branch $B_j:X\to W_j$. If
+\begin{equation}\label{eq:intro-factorization-v13}
+B_j=G_jQ_j,
+\qquad
+X\xrightarrow{Q_j}Z_j\xrightarrow{G_j}W_j,
+\end{equation}
+then every bijection $T:Z_j\to Z'_j$ gives
+\[
+G_jQ_j=(G_jT^{-1})(TQ_j).
+\]
+The composite branch therefore does not determine its intermediate presentation. Nor does this algebra decide whether $T$ merely redescribes one represented state or is another transformation the architecture actually computes.
+
+We keep the represented receiver process before contracting it to $B_j$. At the selected cut, $Q_j(x)$ is the state supplied to the receiver-local continuation and $G_j$ is the computation that follows. Now deliberately forget the presentation and retain only which predecessor states become equal:
+\[
+\boxed{\mathsf D(Q_j):=\ker Q_j.}
+\]
+This \emph{distinction shadow} records the predecessor differences that survive while discarding carrier coordinates and architectural roles. For a fixed branch, equal shadows classify unmarked surjective factorizations up to one unique carrier bijection. The result gives an exact answer to how much of the represented process survives this extensional reduction.
+
+The answer is not ``all of the architecture.'' An invertible conversion can preserve every predecessor distinction while mixing coordinates that identify receivers, sources, tokens, sites, heads, or other roles. The old coordinates remain recoverable, but recovery is computation unless the comparison already treats the conversion as a passive re-presentation. The same issue appears for restricted continuations: two presentations can retain the same information while making it differently accessible to the computation that actually follows.
+
+Composition introduces a second identity problem. A downstream schema acts on the states produced upstream, so for
+\[
+\Omega\xrightarrow{A}X\xrightarrow{Q_{j,\theta}}Z_{j,\theta}
+\]
+the effective interface is $Q_{j,\theta}A$. Its distinction shadow satisfies
+\[
+\ker(Q_{j,\theta}A)=(A\times A)^{-1}\ker Q_{j,\theta}.
+\]
+A downstream module label therefore need not name an independent architectural degree of freedom once the upstream representation is fixed. The main witness makes this concrete with local and attention schemas: they have the same effective distinction classes after one injective prefix and different classes after another. Both prefixes preserve every predecessor distinction, so the change cannot be explained by upstream information loss.
+
+\subsection{Contributions}
+
+The paper develops three connected claims about neural architecture.
+
+\begin{enumerate}[label=(\arabic*)]
+\item \textbf{Architecture is finer than its extensional shadow.} The represented interface/continuation process is kept before quotienting by predecessor-state distinctions. For fixed-branch surjective factorizations, the distinction shadow exactly classifies the unmarked factorization class; marked roles identify structure that this quotient forgets.
+
+\item \textbf{Recoverable information and represented accessibility are different questions.} Equal shadows guarantee a unique carrier conversion, but that conversion need not preserve marked organization or the continuation family available at the receiver. The deterministic and squared-loss results separate information lost at the interface from limits imposed by how surviving information is presented and used.
+
+\item \textbf{Downstream architectural identity can depend on upstream representation.} Recutting evaluates downstream interfaces after the prefix that produces their inputs. Local and attention schemas collapse to the same distinction-class set after one injective prefix and separate after another; a separate lossy construction connects the same analysis to exact task barriers.
+\end{enumerate}
+
+Standard Transformer attention and a PreNorm block then show where these objects occur in a familiar architecture.
+
+\subsection{Scope}
+
+The paper studies represented architectural cuts and the roles treated as constitutive there. It stops before complete implementation or causal-mechanism identity. The quotient, factorization, and affine-support facts below are mathematical tools used to make the architecture question exact.
