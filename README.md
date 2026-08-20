@@ -91,9 +91,7 @@ $$
 the relevant effective interface is $Q_{j,\theta}A$, with
 
 $$
-\ker(Q_{j,\theta}A)
-=
-(A\times A)^{-1}\ker Q_{j,\theta}.
+\ker(Q_{j,\theta}A)=(A\times A)^{-1}\ker Q_{j,\theta}.
 $$
 
 This means that a downstream module label need not define a context-independent architectural degree of freedom. Whether two downstream choices remain distinct can depend on the upstream representation that supplies their inputs.
