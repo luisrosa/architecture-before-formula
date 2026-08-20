@@ -31,7 +31,7 @@
 
 ## Communication discipline
 
-18. Public-facing prose describes the contribution as a formal theory or formalism of represented neural-architecture individuation; `framework` is not used as the generic label for the scientific contribution.
+18. Public-facing prose describes the contribution as a formal theory or formalism of represented neural-architecture individuation.
 19. Architecture-search discussion concerns contextual redundancy, search-space individuation, and quotient definition. No generic claim of faster, easier, or polynomial-time architecture search is made.
 20. Interpretability discussion is limited to represented-process individuation, distinction preservation, marked organization, and continuation accessibility. It does not identify represented-process equivalence with complete causal-mechanism identity and does not claim a general solution to mechanistic interpretability.
 21. Recoverability or external decodability is not identified with information actually accessible to or used by the represented continuation.
