@@ -32,27 +32,27 @@ The central move is to choose the architectural primitive before quotienting awa
 
 At a selected receiver cut, the theory keeps the represented process
 
-```text
-X --Q_j--> Z_j --G_j--> W_j
-```
+$$
+X \xrightarrow{Q_j} Z_j \xrightarrow{G_j} W_j,
+\qquad
+B_j = G_jQ_j,
+$$
 
-with `B_j = G_j Q_j`, rather than immediately contracting it to the composite branch `B_j`.
+rather than immediately contracting it to the composite branch $B_j$.
 
-`Q_j(x)` is the intermediate state actually presented for further computation. Its distinction shadow
+$Q_j(x)$ is the intermediate state actually presented for further computation. Its distinction shadow
 
-```text
-D(Q_j) = ker Q_j
-```
+$$
+\mathsf D(Q_j)=\ker Q_j
+$$
 
 records only which predecessor states remain distinguishable at the cut. The full represented process retains more: carrier presentation, declared architectural roles, and the continuation that actually receives and uses the retained state.
 
 This separates three questions that are often conflated:
 
-```text
-Which predecessor distinctions survive?
-How are those distinctions represented and organized?
-Which of them can the represented continuation actually access?
-```
+- **Which predecessor distinctions survive?**
+- **How are those distinctions represented and organized?**
+- **Which of them can the represented continuation actually access?**
 
 The distinction shadow answers the first question only. The theory is built to keep the others visible.
 
@@ -70,11 +70,13 @@ Equal distinction shadows guarantee recoverability up to the unique carrier re-p
 
 In short:
 
-```text
-information preserved
-    != represented organization
-    != information accessible to the same continuation
-```
+$$
+\text{information preserved}
+\;\neq\;
+\text{represented organization}
+\;\neq\;
+\text{continuation accessibility}.
+$$
 
 An invertible conversion can preserve every predecessor distinction while still changing the coordinates that name receivers, sources, tokens, sites, heads, or other architecturally declared roles. Recovery is itself computation unless the comparison has already declared that conversion to be a passive re-presentation.
 
@@ -82,15 +84,17 @@ An invertible conversion can preserve every predecessor distinction while still 
 
 A downstream schema does not act on an abstract input in isolation. It acts on the representation produced upstream. For
 
-```text
-Omega --A--> X --Q_{j,theta}--> Z_{j,theta}
-```
+$$
+\Omega \xrightarrow{A} X \xrightarrow{Q_{j,\theta}} Z_{j,\theta},
+$$
 
-the relevant effective interface is `Q_{j,theta} A`, with
+the relevant effective interface is $Q_{j,\theta}A$, with
 
-```text
-ker(Q_{j,theta} A) = (A x A)^(-1) ker Q_{j,theta}.
-```
+$$
+\ker(Q_{j,\theta}A)
+=
+(A\times A)^{-1}\ker Q_{j,\theta}.
+$$
 
 This means that a downstream module label need not define a context-independent architectural degree of freedom. Whether two downstream choices remain distinct can depend on the upstream representation that supplies their inputs.
 
@@ -100,14 +104,15 @@ The paper makes the compositional claim concrete with exact two-token local and 
 
 Two upstream maps are compared:
 
-```text
-A_enc(u,v) = (2u+v, 0)
-A_id(u,v)  = (u,v)
-```
+$$
+A_{\mathrm{enc}}(u,v)=(2u+v,0),
+\qquad
+A_{\mathrm{id}}(u,v)=(u,v).
+$$
 
-Both are injective. After `A_enc`, the local and attention schemas have the same effective distinction-class set. After the identity prefix, their effective distinction-class sets differ.
+Both are injective. After $A_{\mathrm{enc}}$, the local and attention schemas have the same effective distinction-class set. After the identity prefix, their effective distinction-class sets differ.
 
-Because **both prefixes are injective**, the collapse after `A_enc` cannot be attributed to upstream predecessor-information loss.
+Because **both prefixes are injective**, the collapse after $A_{\mathrm{enc}}$ cannot be attributed to upstream predecessor-information loss.
 
 The conclusion is not that “local and attention are the same architecture” in general. It is sharper and more contextual:
 
@@ -146,19 +151,12 @@ In the injective local/attention construction, all predecessor distinctions surv
 
 ### Prediction barriers from genuine information loss
 
-A separate broadcast prefix genuinely erases a predecessor distinction needed by the target. In that witness the theory yields exact prediction barriers: `1/2` for the stated worst-case deterministic problem and `1/4` for the stated Bayes squared-loss problem.
+A separate broadcast prefix genuinely erases a predecessor distinction needed by the target. In that witness the theory yields exact prediction barriers: $1/2$ for the stated worst-case deterministic problem and $1/4$ for the stated Bayes squared-loss problem.
 
-Keeping these examples separate distinguishes
+Keeping these examples separate distinguishes:
 
-```text
-“two nominal architecture choices are redundant in this context”
-```
-
-from
-
-```text
-“the representation has destroyed information required for the task.”
-```
+- **Contextual architectural redundancy:** two nominal architecture choices are redundant at the stated comparison level in a particular compositional context.
+- **Information loss:** the representation has destroyed a predecessor distinction required for the task.
 
 ## Formal results
 
@@ -166,9 +164,9 @@ The manuscript proves the following theorem-level results underlying the narrati
 
 1. **Exact extensional classification at a fixed branch.** For surjective factorizations of the same branch, equality of distinction shadows is equivalent to unmarked factorization isomorphism through a unique carrier re-presentation.
 2. **Marked identity is finer than preserved information.** Equal kernels guarantee recoverability up to re-presentation, but do not determine marked receiver organization or make the recovering conversion available to a restricted continuation.
-3. **Composition changes the relevant comparison object.** Effective distinction classes are computed after precomposition through `Q_{j,theta} A`; family envelopes summarize common retained distinctions but are not complete architecture or capability objects.
-4. **Injective contextual-collapse witness.** Local and attention schemas have the same effective distinction-class set after `A_enc(u,v)=(2u+v,0)` and different sets after the injective identity prefix. The collapse therefore cannot be attributed to upstream information loss.
-5. **Separate lossy prediction barrier.** A broadcast prefix supplies exact deterministic and Bayes squared-loss barriers (`1/2` and `1/4` in the stated witness) when the needed predecessor distinction is genuinely erased.
+3. **Composition changes the relevant comparison object.** Effective distinction classes are computed after precomposition through $Q_{j,\theta}A$; family envelopes summarize common retained distinctions but are not complete architecture or capability objects.
+4. **Injective contextual-collapse witness.** Local and attention schemas have the same effective distinction-class set after $A_{\mathrm{enc}}(u,v)=(2u+v,0)$ and different sets after the injective identity prefix. The collapse therefore cannot be attributed to upstream information loss.
+5. **Separate lossy prediction barrier.** A broadcast prefix supplies exact deterministic and Bayes squared-loss barriers ($1/2$ and $1/4$ in the stated witness) when the needed predecessor distinction is genuinely erased.
 
 ## Transformers as an instance of the theory
 
@@ -196,15 +194,13 @@ The maintained manuscript body is byte-identical to the frozen v1.6 scientific s
 
 ## Repository organization
 
-```text
-paper/                 Current v1.6 manuscript source
-releases/v1.6/         Current provenance record + source hashes
-releases/v1.0/         Historical public v1.0 release
-prior_versions/        Version-lineage note
-CLAIMS.md               Current semantic/claim ledger
-docs/formal-audit.md    Formal and release audit
-scripts/                Build/release validation
-```
+- `paper/` — current v1.6 manuscript source
+- `releases/v1.6/` — current provenance record and source hashes
+- `releases/v1.0/` — historical public v1.0 release
+- `prior_versions/` — version-lineage note
+- `CLAIMS.md` — current semantic/claim ledger
+- `docs/formal-audit.md` — formal and release audit
+- `scripts/` — build/release validation
 
 ## Citation
 

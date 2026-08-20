@@ -7,6 +7,9 @@
 - Adds explicit motivation for architecture search as a search-space individuation and quotient problem, without claiming a generic computational speedup.
 - Adds interpretability motivation through the prior questions of represented-process identity, recoverability versus continuation accessibility, and context-dependent internal individuation.
 - Adds communication guardrails to the formal audit and consistently describes the scientific contribution as a theory/formalism.
+- Replaces code-style rendering of mathematical notation with native GitHub math.
+- Converts conceptual pseudo-code blocks to ordinary Markdown lists and prose.
+- Converts mathematical inline code spans to inline math while preserving code styling for commands, paths, and repository objects.
 - Does not modify the frozen v1.6 manuscript source, release artifacts, theorem statements, citation metadata, or provenance records.
 
 ## v1.6 — 2026-08-14
