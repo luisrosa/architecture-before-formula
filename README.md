@@ -18,13 +18,19 @@ Luis F. Rosario Freytes, University of Michigan, Ann Arbor
 
 The earlier [v1.0 public release](releases/v1.0/) is retained as an immutable historical snapshot of the same research lineage. The current manuscript is a substantial reconstruction: architecture individuation and composition are now the primary problem; the earlier incorrect non-completability theorem and dependent claims are absent; and the decisive architecture-space witness uses injective prefixes.
 
-## Question
+## The problem: architecture before architectural identity
 
-Neural architectures are routinely compared, searched, compressed, or declared equivalent using module labels, computation graphs, or realized input-output functions. Those descriptions answer different identity questions. The paper asks a prior question:
+Neural architecture is routinely treated as a design variable before the identity criterion for that variable is made explicit. Module labels, computation graphs, represented intermediate states, and realized input-output functions can disagree about whether two descriptions should count as the same architecture.
+
+The paper therefore asks a prior question:
 
 > **What should count as the same neural architecture?**
 
-At a selected receiver cut, the analysis keeps the represented process
+The central move is to choose the architectural primitive before quotienting away the structure under study.
+
+## The proposed architectural primitive
+
+At a selected receiver cut, the theory keeps the represented process
 
 ```text
 X --Q_j--> Z_j --G_j--> W_j
@@ -32,20 +38,149 @@ X --Q_j--> Z_j --G_j--> W_j
 
 with `B_j = G_j Q_j`, rather than immediately contracting it to the composite branch `B_j`.
 
-`Q_j(x)` is the intermediate state actually presented for further computation. `D(Q_j) = ker Q_j` is the extensional shadow recording which predecessor distinctions survive the cut. A represented receiver process keeps more structure than this shadow: carrier presentation, declared marks, and the continuations that can actually access the retained state matter. Under an upstream map `A`, the effective interface is `Q_{j,theta} A`; downstream architectural distinctions can therefore depend on upstream representation even when the prefix is injective.
+`Q_j(x)` is the intermediate state actually presented for further computation. Its distinction shadow
 
-## Main results
+```text
+D(Q_j) = ker Q_j
+```
+
+records only which predecessor states remain distinguishable at the cut. The full represented process retains more: carrier presentation, declared architectural roles, and the continuation that actually receives and uses the retained state.
+
+This separates three questions that are often conflated:
+
+```text
+Which predecessor distinctions survive?
+How are those distinctions represented and organized?
+Which of them can the represented continuation actually access?
+```
+
+The distinction shadow answers the first question only. The theory is built to keep the others visible.
+
+## What follows from this choice of architectural primitive
+
+### 1. An exact information-level equivalence
+
+For two surjective factorizations of the same fixed branch, equality of distinction shadows is exactly the condition for unmarked factorization isomorphism through one unique carrier re-presentation.
+
+So “these interfaces preserve the same predecessor distinctions” is not merely an informal resemblance claim. Under the stated conditions it defines an exact extensional quotient of represented factorizations.
+
+### 2. Preserved information is not the same as represented accessibility
+
+Equal distinction shadows guarantee recoverability up to the unique carrier re-presentation. They do **not** imply that the two represented processes have the same marked organization, nor that the recovering conversion is already available to a restricted continuation.
+
+In short:
+
+```text
+information preserved
+    != represented organization
+    != information accessible to the same continuation
+```
+
+An invertible conversion can preserve every predecessor distinction while still changing the coordinates that name receivers, sources, tokens, sites, heads, or other architecturally declared roles. Recovery is itself computation unless the comparison has already declared that conversion to be a passive re-presentation.
+
+### 3. Architectural identity can depend on compositional context
+
+A downstream schema does not act on an abstract input in isolation. It acts on the representation produced upstream. For
+
+```text
+Omega --A--> X --Q_{j,theta}--> Z_{j,theta}
+```
+
+the relevant effective interface is `Q_{j,theta} A`, with
+
+```text
+ker(Q_{j,theta} A) = (A x A)^(-1) ker Q_{j,theta}.
+```
+
+This means that a downstream module label need not define a context-independent architectural degree of freedom. Whether two downstream choices remain distinct can depend on the upstream representation that supplies their inputs.
+
+## The decisive construction: contextual collapse without information loss
+
+The paper makes the compositional claim concrete with exact two-token local and attention schemas.
+
+Two upstream maps are compared:
+
+```text
+A_enc(u,v) = (2u+v, 0)
+A_id(u,v)  = (u,v)
+```
+
+Both are injective. After `A_enc`, the local and attention schemas have the same effective distinction-class set. After the identity prefix, their effective distinction-class sets differ.
+
+Because **both prefixes are injective**, the collapse after `A_enc` cannot be attributed to upstream predecessor-information loss.
+
+The conclusion is not that “local and attention are the same architecture” in general. It is sharper and more contextual:
+
+> **At the paper's stated distinction level, a nominal downstream architectural distinction can disappear under one injective upstream representation and reappear under another.**
+
+So a module vocabulary can overcount genuinely independent architectural choices.
+
+## Why this matters
+
+### Architecture search: which nominal choices are genuinely independent?
+
+A search problem over an architecture space already presupposes an individuation rule for that space. If downstream architectural identity depends on upstream representation, a Cartesian search parameterization can contain nominal choices that collapse after composition.
+
+The theory therefore identifies a quotient problem that architecture search has to settle before treating every syntactic module choice as an independent coordinate.
+
+It does **not** prove that computing or exploiting such a quotient is generically easier, faster, or polynomial-time. The contribution is prior: it specifies what a quotient-aware comparison would need to preserve and why that quotient can be context dependent.
+
+### Interpretability: what exactly is the internal object being interpreted?
+
+Interpretability inherits the same individuation problem. Claims about heads, circuits, directions, layers, or other internal objects presuppose a criterion for when two represented computations count as the same object across changes of representation and compositional context.
+
+The theory contributes two distinctions that matter directly to that question:
+
+- **Recoverability is weaker than represented accessibility.** Information can be recoverable from an intermediate state without being available to the restricted continuation that actually follows.
+- **Module labels need not define context-independent computational individuals.** The local/attention witness shows that the effective distinction represented by a downstream schema can change with an injective upstream representation.
+
+This is not a complete theory of causal-mechanism identity and does not by itself solve mechanistic interpretability. Rather, it formalizes part of the prior individuation problem: which internal differences correspond to different represented computations in the first place.
+
+## Two different phenomena the theory separates
+
+The injective contextual-collapse result and the lossy prediction barrier are deliberately different results.
+
+### Architectural redundancy without information loss
+
+In the injective local/attention construction, all predecessor distinctions survive upstream, yet the downstream distinction classes can collapse in one representational context.
+
+### Prediction barriers from genuine information loss
+
+A separate broadcast prefix genuinely erases a predecessor distinction needed by the target. In that witness the theory yields exact prediction barriers: `1/2` for the stated worst-case deterministic problem and `1/4` for the stated Bayes squared-loss problem.
+
+Keeping these examples separate distinguishes
+
+```text
+“two nominal architecture choices are redundant in this context”
+```
+
+from
+
+```text
+“the representation has destroyed information required for the task.”
+```
+
+## Formal results
+
+The manuscript proves the following theorem-level results underlying the narrative above:
 
 1. **Exact extensional classification at a fixed branch.** For surjective factorizations of the same branch, equality of distinction shadows is equivalent to unmarked factorization isomorphism through a unique carrier re-presentation.
 2. **Marked identity is finer than preserved information.** Equal kernels guarantee recoverability up to re-presentation, but do not determine marked receiver organization or make the recovering conversion available to a restricted continuation.
-3. **Composition changes the relevant architecture object.** Effective distinction classes are computed after precomposition through `Q_{j,theta} A`; family envelopes summarize common retained distinctions but are not complete architecture or capability objects.
-4. **Injective contextual-collapse witness.** In the exact two-token construction, both `A_enc(u,v)=(2u+v,0)` and the identity prefix are injective. Local and attention schemas have the same effective distinction-class set after the former and different sets after the latter. The collapse therefore cannot be attributed to upstream information loss.
+3. **Composition changes the relevant comparison object.** Effective distinction classes are computed after precomposition through `Q_{j,theta} A`; family envelopes summarize common retained distinctions but are not complete architecture or capability objects.
+4. **Injective contextual-collapse witness.** Local and attention schemas have the same effective distinction-class set after `A_enc(u,v)=(2u+v,0)` and different sets after the injective identity prefix. The collapse therefore cannot be attributed to upstream information loss.
 5. **Separate lossy prediction barrier.** A broadcast prefix supplies exact deterministic and Bayes squared-loss barriers (`1/2` and `1/4` in the stated witness) when the needed predecessor distinction is genuinely erased.
-6. **Transformers as a worked realization.** Self-attention, pointwise feed-forward structure, residual composition, and PreNorm blocks instantiate the represented-process analysis; they are not the definition of architecture and are not presented as a separate novelty claim.
+
+## Transformers as an instance of the theory
+
+Transformers make the represented-process analysis concrete because attention exposes a clear receiver/source organization. The paper shows how self-attention, pointwise feed-forward computation, residual composition, and PreNorm blocks instantiate the theory.
+
+They are not the definition of architecture, and the Transformer reconstruction is not presented as a separate novelty claim.
 
 ## Scope
 
-The distinction shadow is not a complete architecture identity object. Marked receiver-process identity is still weaker than complete architecture identity, implementation identity, or causal-mechanism identity. The paper also does not claim that quotient-aware architecture search is automatically computationally easier or faster; it identifies what a comparison/search procedure would need to quotient only under the declared context and identity criterion.
+The distinction shadow is not a complete architecture identity object. Marked receiver-process identity is still weaker than complete architecture identity, implementation identity, or causal-mechanism identity.
+
+The theory also does not claim that quotient-aware architecture search is automatically computationally easier or faster, and it does not identify recoverable or decodable information with information causally used by a represented continuation.
 
 ## Build from source
 
