@@ -6,7 +6,7 @@
 - Promotes the injective local/attention construction as the central concrete example of contextual architectural redundancy without predecessor-information loss.
 - Adds explicit motivation for architecture search as a search-space individuation and quotient problem, without claiming a generic computational speedup.
 - Adds interpretability motivation through the prior questions of represented-process identity, recoverability versus continuation accessibility, and context-dependent internal individuation.
-- Adds communication guardrails to the formal audit and consistently describes the scientific contribution as a theory/formalism rather than a generic framework.
+- Adds communication guardrails to the formal audit and consistently describes the scientific contribution as a theory/formalism.
 - Does not modify the frozen v1.6 manuscript source, release artifacts, theorem statements, citation metadata, or provenance records.
 
 ## v1.6 — 2026-08-14
