@@ -28,3 +28,11 @@
 15. The maintained manuscript body under `paper/` is byte-identical to the frozen v1.6 scientific source; the arXiv v3 upload uses the same scientific body with upload-facing packaging.
 16. `releases/v1.6/SOURCE_SHA256SUMS.txt` fixes the current manuscript source bytes; frozen submission artifacts are identified by provenance hashes rather than copied from private submission records.
 17. Fresh-build PDFs and frozen submission binaries are different provenance claims; byte equality across TeX environments is not assumed.
+
+## Communication discipline
+
+18. Public-facing prose describes the contribution as a formal theory or formalism of represented neural-architecture individuation; `framework` is not used as the generic label for the scientific contribution.
+19. Architecture-search discussion concerns contextual redundancy, search-space individuation, and quotient definition. No generic claim of faster, easier, or polynomial-time architecture search is made.
+20. Interpretability discussion is limited to represented-process individuation, distinction preservation, marked organization, and continuation accessibility. It does not identify represented-process equivalence with complete causal-mechanism identity and does not claim a general solution to mechanistic interpretability.
+21. Recoverability or external decodability is not identified with information actually accessible to or used by the represented continuation.
+22. Statements about the local/attention witness remain explicitly contextual: equality after `A_enc` is equality of the stated effective distinction-class sets, not a claim that local and attention are globally identical architectures.
